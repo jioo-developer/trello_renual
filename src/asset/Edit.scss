@@ -1,0 +1,15 @@
+@import "./MixIn";
+
+@include edit-template();
+
+.list-body {
+  .edit_area {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .board-edit {
+    padding-top: 4px;
+    box-sizing: border-box;
+  }
+}

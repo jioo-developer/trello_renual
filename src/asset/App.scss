@@ -1,0 +1,290 @@
+@import "./MixIn";
+
+.App {
+  height: 110vh;
+  background: url(../../public/photo-1548222606-6c4f581fd09d.jpg);
+  background-position: center 35%;
+}
+
+header {
+  background: #111;
+  height: 45px;
+  opacity: 0.7;
+  text-align: center;
+  line-height: 45px;
+  color: #fff;
+}
+
+.board_wrap {
+  display: flex;
+  height: 100vh;
+  padding: 15px 15px 0 15px;
+  box-sizing: border-box;
+
+  @media #{$breakpoint-mobile} {
+    flex-wrap: wrap;
+    width: 97%;
+    margin: 0 auto;
+    float: none;
+  }
+
+  .list {
+    display: flex;
+    align-self: flex-start;
+    width: 272px;
+    height: auto;
+    flex-direction: column;
+    background: #ebecf0;
+    border-radius: 3px;
+    margin: 0 5px;
+    position: relative;
+
+    @media #{$breakpoint-mobile} {
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .list-header {
+      display: flex;
+      width: 100%;
+      padding: 10px 12px 10px 8px;
+      box-sizing: border-box;
+      justify-content: space-between;
+      align-items: center;
+
+      .title-area {
+        background: transparent;
+        border-radius: 5px;
+        box-shadow: none;
+        font-weight: 600;
+        height: 20px;
+        margin: -4px 0;
+        max-height: 256px;
+        min-height: 20px;
+        padding: 4px 8px;
+        border: 0;
+        resize: none;
+        width: 80%;
+        box-sizing: border-box;
+      }
+
+      .title-area:focus {
+        background: #fff;
+        outline-color: #1555c4;
+      }
+
+      button {
+        border: 0;
+        outline: 0;
+        font-size: 12px;
+        border-radius: 5px;
+        padding: 3px 5px;
+        box-sizing: border-box;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .fa-ellipsis {
+        padding-top: 3px;
+        cursor: pointer;
+      }
+
+      .svg path {
+        color: #fff;
+      }
+
+      .submit {
+        padding: 0;
+        margin-right: 5px;
+      }
+    }
+
+    .remove-card {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    .list-body {
+      display: flex;
+      align-items: center;
+      color: #172b4d;
+      font-size: 14px;
+      padding: 4px 8px 6px 8px;
+      flex-direction: column;
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-height: 80px;
+        overflow: hidden;
+        background: #fff;
+        padding: 0 10px 15px 10px;
+        margin-bottom: 8px;
+        box-sizing: border-box;
+        border-radius: 5px;
+        position: relative;
+        justify-content: center;
+
+        .icon_wrap {
+          align-self: flex-start;
+          margin: 15px 0 0 7px;
+        }
+
+        .fa-list {
+          margin-right: 12px;
+          cursor: pointer;
+        }
+
+        .text_wrap {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .fa-pencil {
+            font-size: 0.8em;
+            display: none;
+          }
+
+          .card-text {
+            padding-left: 4px;
+            box-sizing: border-box;
+            border: 0;
+            resize: none;
+            width: 90%;
+          }
+        }
+
+        .update-wrap {
+          display: flex;
+          align-items: center;
+          .save {
+            width: 50px;
+            height: 26px;
+            border-radius: 3px;
+            outline: 0;
+            border: 0;
+            background: #1555c4;
+            color: #fff;
+            cursor: pointer;
+            margin-right: 10px;
+          }
+
+          .cancel {
+            margin-top: 2px;
+            font-size: 22px;
+            opacity: 0.6;
+          }
+        }
+
+        .label-wrap {
+          display: flex;
+        }
+
+        .label-wrap li {
+          width: 40px;
+          height: 8px;
+          border-radius: 5px;
+          margin-right: 5px;
+        }
+
+        .label-wrap li:last-child {
+          margin-right: 0;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+      }
+
+      .card:hover .fa-pencil {
+        display: block;
+      }
+
+      .card:last-child {
+        margin-bottom: 0;
+      }
+
+      .board-add {
+        width: 100%;
+        padding: 10px 8px;
+        cursor: pointer;
+        border-radius: 3px;
+        box-sizing: border-box;
+
+        .fa-1x {
+          margin-right: 10px;
+          color: #6b778c;
+        }
+      }
+
+      .board-add:hover {
+        background-color: rgba(9, 30, 66, 0.08);
+        color: #172b4d;
+      }
+    }
+  }
+
+  .another-list {
+    display: flex;
+    width: 272px;
+    align-self: flex-start;
+    color: #fff;
+    margin: 0 5px;
+    order: 10000;
+
+    @media #{$breakpoint-mobile} {
+      width: 100%;
+    }
+
+    .another-add {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+      height: 45px;
+      background: #ebecf0;
+      opacity: 0.65;
+      font-weight: 600;
+      font-size: 15px;
+      border: 0;
+      outline: 0;
+      border-radius: 5px;
+      color: #222;
+      padding: 10px 20px;
+      box-sizing: border-box;
+      cursor: pointer;
+
+      .fa-1x {
+        margin-right: 10px;
+        color: #6b778c;
+        position: relative;
+        top: 2px;
+
+        @media #{$breakpoint-mobile} {
+          display: none;
+        }
+      }
+
+      @media #{$breakpoint-mobile} {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    .another-add:hover {
+      background: #fff;
+      opacity: 0.8;
+    }
+  }
+}
+
+.black {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.margin {
+  margin-bottom: 10px;
+}
