@@ -41,6 +41,6 @@ footer {
   overflow: hidden;
 }
 
-textarea::placeholder{
+textarea::placeholder {
   color: #333;
 }

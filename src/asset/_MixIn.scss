@@ -68,6 +68,12 @@ $breakpoint-mobile: "all and (max-width:1000px)";
   }
 }
 
+@mixin buttons {
+  outline: none;
+  border: 0;
+  background: transparent;
+}
+
 $rgba: rgb(9, 30, 66);
 $alpha: 0.25;
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { EditAction } from "../module/reducer";
 import Edit from "./Edit";
@@ -17,7 +17,7 @@ function Creator({ FontAwesomeIcon, iconObject, dispatch }) {
         >
           <button type="button" className="another-add">
             <FontAwesomeIcon icon={iconObject.faPlus} size="1x" />
-            add Another List
+            Add Another List
           </button>
         </article>
       )}

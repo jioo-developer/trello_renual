@@ -1,7 +1,6 @@
 const initialState = {
   EditToggle: false,
   CardToggle: false,
-  cardNum: "",
 };
 
 const EditToggle = "EditToggle";

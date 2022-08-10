@@ -1,5 +1,4 @@
-@import "./MixIn";
-
+@import "mixin.scss";
 .App {
   height: 110vh;
   background: url(../../public/photo-1548222606-6c4f581fd09d.jpg);
@@ -32,7 +31,6 @@ header {
     display: flex;
     align-self: flex-start;
     width: 272px;
-    height: auto;
     flex-direction: column;
     background: #ebecf0;
     border-radius: 3px;
@@ -48,6 +46,7 @@ header {
       display: flex;
       width: 100%;
       padding: 10px 12px 10px 8px;
+      min-height: 42.5px;
       box-sizing: border-box;
       justify-content: space-between;
       align-items: center;
@@ -122,8 +121,7 @@ header {
         min-height: 80px;
         overflow: hidden;
         background: #fff;
-        padding: 0 10px 15px 10px;
-        margin-bottom: 8px;
+        padding: 0 10px 10px 10px;
         box-sizing: border-box;
         border-radius: 5px;
         position: relative;
@@ -146,6 +144,10 @@ header {
           .fa-pencil {
             font-size: 0.8em;
             display: none;
+            cursor: pointer;
+            background: #f7f7f7;
+            padding: 5px;
+            border-radius: 5px;
           }
 
           .card-text {
@@ -213,6 +215,7 @@ header {
         cursor: pointer;
         border-radius: 3px;
         box-sizing: border-box;
+        text-align: left;
 
         .fa-1x {
           margin-right: 10px;
@@ -245,21 +248,21 @@ header {
       align-items: center;
       width: 100%;
       height: 45px;
-      background: #ebecf0;
-      opacity: 0.65;
+      background: #ffffff3d;
+
       font-weight: 600;
       font-size: 15px;
       border: 0;
       outline: 0;
       border-radius: 5px;
-      color: #222;
+      color: #fff;
       padding: 10px 20px;
       box-sizing: border-box;
       cursor: pointer;
 
       .fa-1x {
         margin-right: 10px;
-        color: #6b778c;
+        color: #fff;
         position: relative;
         top: 2px;
 
@@ -287,4 +290,17 @@ header {
 
 .margin {
   margin-bottom: 10px;
+}
+
+button {
+  @include buttons();
+}
+
+.saveBtn {
+  background: #026aa7;
+  color: #fff;
+  border-radius: 5px;
+  width: 76px;
+  height: 32px;
+  margin-top: 20px;
 }

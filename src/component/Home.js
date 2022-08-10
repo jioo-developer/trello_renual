@@ -1,17 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { db } from "../Firebase";
-import Add from "./Add";
 import Creator from "./Creator";
-import TextArea from "react-textarea-autosize";
-import UseInput from "../hook/UseInput";
+import Card from "./Card";
 function Home({ FontAwesomeIcon, iconObject }) {
   const dispatch = useDispatch();
   const [list, setList] = useState([]);
-  const [header, setHeader] = UseInput("");
-  const [content, setContent] = UseInput("");
   const searchDB = db.collection("section");
-  const [changeTitle, setChange] = useState(false);
 
   useEffect(() => {
     searchDB.onSnapshot((snapshot) => {
@@ -45,69 +40,21 @@ function Home({ FontAwesomeIcon, iconObject }) {
     });
   };
 
-  const onchangeHeader = useCallback(
-    (e) => {
-      setHeader(e);
-    },
-    [header]
-  );
-
-  const onchangeContent = useCallback(
-    (e) => {
-      setContent(e);
-    },
-    [content]
-  );
-
   return (
     <section className="board_wrap">
-      {list.map(function (value, index) {
-        return (
-          <article className="list">
-            <div className="list-header">
-              <TextArea
-                className="title-area"
-                defaultValue={value.header}
-                onChange={(e) => {
-                  onchangeHeader(e);
-                }}
-              />
-              <button type="button">
-                <FontAwesomeIcon icon={iconObject.faEllipsis} size="1x" />
-              </button>
-              <button type="button" className="submit">
-                <FontAwesomeIcon icon={iconObject.faCheck} size="1x" />
-              </button>
-            </div>
-            <div className="list-body">
-              <article className="card">
-                <ul className="label-wrap">
-                  <li className="show-label"></li>
-                </ul>
-                <div className="text_wrap">
-                  <TextArea
-                    className={`card-text`}
-                    defaultValue={value.content}
-                    onChange={(e) => {
-                      onchangeContent(e);
-                    }}
-                  />
-                  <FontAwesomeIcon icon={iconObject.faPencil} size="1x" />
-                </div>
-
-                <div className="icon_wrap">
-                  <FontAwesomeIcon icon={iconObject.faList} size="1x" />
-                </div>
-              </article>
-              <Add
+      {list.length !== 0
+        ? list.map(function (value, index) {
+            return (
+              <Card
+                value={value}
+                index={index}
                 FontAwesomeIcon={FontAwesomeIcon}
                 iconObject={iconObject}
                 dispatch={dispatch}
               />
-            </div>
-          </article>
-        );
-      })}
+            );
+          })
+        : null}
       <Creator
         FontAwesomeIcon={FontAwesomeIcon}
         iconObject={iconObject}
