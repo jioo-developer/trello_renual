@@ -3,13 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import { useSelector, useDispatch } from "react-redux";
-import { db } from "../Firebase";
 import "../asset/Edit.scss";
 import { EditAction, RemoveAction } from "../module/reducer";
 import useInput from "../hook/UseInput";
-const searchDB = db.collection("section");
 
-function Edit({ id, index }) {
+function Edit({ id, index, searchDB }) {
   const dispatch = useDispatch();
   const [text, setText] = useInput("");
 
@@ -22,10 +20,14 @@ function Edit({ id, index }) {
 
   async function createCard(e) {
     e.preventDefault();
+    const length = searchDB.get().then((data) => {
+      return data.docs.length;
+    });
     await searchDB
       .doc(text)
       .set({
         header: text,
+        order: JSON.parse(length) + 1,
       })
       .then(() => {
         searchDB.doc(text).collection("article").add({ content: "" });

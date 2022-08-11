@@ -2,12 +2,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { EditAction } from "../module/reducer";
 import Edit from "./Edit";
-function Creator({ FontAwesomeIcon, iconObject, dispatch }) {
+function Creator({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   const create = useSelector((state) => state.EditToggle);
   return (
     <>
       {create ? (
-        <Edit opener="creator" />
+        <Edit opener="creator" searchDB={searchDB} />
       ) : (
         <article
           className="another-list"

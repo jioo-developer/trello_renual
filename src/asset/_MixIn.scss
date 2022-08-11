@@ -20,6 +20,7 @@ $breakpoint-mobile: "all and (max-width:1000px)";
     align-self: flex-start;
     padding-top: 15px;
     box-sizing: border-box;
+    order: 9999;
 
     .board-edit {
       width: 100%;

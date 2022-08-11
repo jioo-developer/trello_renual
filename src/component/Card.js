@@ -1,14 +1,20 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import TextArea from "react-textarea-autosize";
 import UseInput from "../hook/UseInput";
 import Edit from "./Edit";
 import { useSelector } from "react-redux";
 import { IndexAction, RemoveAction } from "../module/reducer";
-function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
+function Card({
+  FontAwesomeIcon,
+  iconObject,
+  value,
+  index,
+  dispatch,
+  searchDB,
+}) {
   const LoadToggle = useSelector((state) => state);
   const [header, setHeader] = UseInput("");
   const [content, setContent] = UseInput("");
-  const [conHeight, setConHeight] = useState(1);
 
   const onchangeHeader = useCallback(
     (e) => {
@@ -36,7 +42,7 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
   }
 
   return (
-    <article className="list">
+    <article className="list" style={{ order: `${value.order}` }}>
       <div className="list-header">
         <TextArea
           className="title-area"
@@ -68,55 +74,57 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
         )}
       </div>
       <div className="list-body">
-        <article className="card">
-          <ul className="label-wrap">
-            <li className="show-label"></li>
-          </ul>
-          {LoadToggle.conIndex.includes(index) ? (
-            <div
-              className="text_wrap"
-              style={{ flexDirection: "column", alignItems: "flex-start" }}
-            >
-              <TextArea
-                className={`card-text`}
-                defaultValue={value.content}
-                name="conIndex"
-                onChange={(e) => onchangeContent(e)}
-                style={{
-                  outline: "none",
-                  width: "99%",
-                }}
-              />
-            </div>
-          ) : (
-            <div className="text_wrap">
-              <TextArea
-                className={`card-text`}
-                defaultValue={value.content}
-                readOnly={true}
-                style={{
-                  outline: "none",
-                  background: "transparent",
-                  cursor: "default",
-                }}
-              />
-              <button
-                type="button"
-                data-index={index}
-                name="conIndex"
-                onClick={(e) => totalToggle(e)}
+        {value.content !== "" ? (
+          <article className="card">
+            <ul className="label-wrap">
+              <li className="show-label"></li>
+            </ul>
+            {LoadToggle.conIndex.includes(index) ? (
+              <div
+                className="text_wrap"
+                style={{ flexDirection: "column", alignItems: "flex-start" }}
               >
-                <FontAwesomeIcon icon={iconObject.faPencil} size="1x" />
-              </button>
-            </div>
-          )}
+                <TextArea
+                  className={`card-text`}
+                  defaultValue={value.content}
+                  name="conIndex"
+                  onChange={(e) => onchangeContent(e)}
+                  style={{
+                    outline: "none",
+                    width: "99%",
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="text_wrap">
+                <TextArea
+                  className={`card-text`}
+                  defaultValue={value.content}
+                  readOnly={true}
+                  style={{
+                    outline: "none",
+                    background: "transparent",
+                    cursor: "default",
+                  }}
+                />
+                <button
+                  type="button"
+                  data-index={index}
+                  name="conIndex"
+                  onClick={(e) => totalToggle(e)}
+                >
+                  <FontAwesomeIcon icon={iconObject.faPencil} size="1x" />
+                </button>
+              </div>
+            )}
 
-          <div className="icon_wrap">
-            <FontAwesomeIcon icon={iconObject.faList} size="1x" />
-          </div>
-        </article>
+            <div className="icon_wrap">
+              <FontAwesomeIcon icon={iconObject.faList} size="1x" />
+            </div>
+          </article>
+        ) : null}
         {LoadToggle.addIndex.includes(index) ? (
-          <Edit opener={"card"} index={index} />
+          <Edit opener={"card"} index={index} searchDB={searchDB} />
         ) : (
           <button
             className="board-add"

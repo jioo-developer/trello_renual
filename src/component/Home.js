@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { db } from "../Firebase";
 import Creator from "./Creator";
 import Card from "./Card";
-function Home({ FontAwesomeIcon, iconObject }) {
+function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   const dispatch = useDispatch();
   const [list, setList] = useState([]);
-  const searchDB = db.collection("section");
+  const searchDB = db.collection(DBNAME);
 
   useEffect(() => {
     searchDB.onSnapshot((snapshot) => {
@@ -51,6 +50,7 @@ function Home({ FontAwesomeIcon, iconObject }) {
                 FontAwesomeIcon={FontAwesomeIcon}
                 iconObject={iconObject}
                 dispatch={dispatch}
+                searchDB={searchDB}
               />
             );
           })
@@ -59,6 +59,7 @@ function Home({ FontAwesomeIcon, iconObject }) {
         FontAwesomeIcon={FontAwesomeIcon}
         iconObject={iconObject}
         dispatch={dispatch}
+        searchDB={searchDB}
       />
     </section>
   );
