@@ -3,16 +3,12 @@ import TextArea from "react-textarea-autosize";
 import UseInput from "../hook/UseInput";
 import Edit from "./Edit";
 import { useSelector } from "react-redux";
-import { CardAction } from "../module/reducer";
+import { CardAction, IndexAction, RemoveAction } from "../module/reducer";
 function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
   const AddCard = useSelector((state) => state.CardToggle);
+  const LoadToggle = useSelector((state) => state);
   const [header, setHeader] = UseInput("");
   const [content, setContent] = UseInput("");
-  const [toggle, setToggle] = useState({
-    toggleArray: [],
-    conToggle: [],
-    addCard: [],
-  });
   const [conHeight, setConHeight] = useState(1);
   const inputFocus = useRef();
   const conFocus = useRef();
@@ -31,53 +27,21 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
     [content]
   );
 
-  function TotalToggle(e, typeState) {
+  function totalToggle(e) {
     const target = parseInt(e.currentTarget.getAttribute("data-index"));
     const typeName = e.currentTarget.name;
-
-    return new Promise(function (resolve) {
-      if (!typeState.includes(target)) {
-        resolve({ target, typeName });
-      }
-    }).then(({ target, typeName }) => {
-      setToggle((prev) => {
-        return {
-          ...prev,
-          addCard: prev.addCard.push(target),
-        };
-      });
-      // setToggle((prev) => {
-      //   if (typeName === "toggleArray") {
-      //     return {
-      //       toggleArray: prev.toggleArray.push(CopyArray),
-      //       conToggle: prev.conToggle,
-      //       conFocus: prev.addCard,
-      //     };
-      //   } else if (typeName === "conToggle") {
-      //     return {
-      //       toggleArray: prev.toggleArray,
-      //       conToggle: prev.conToggle.push(CopyArray),
-      //       conFocus: prev.addCard,
-      //     };
-      //   } else {
-      //     return {
-      //       toggleArray: prev.toggleArray,
-      //       conToggle: prev.conToggle,
-      //       conFocus: prev.addCard.push(CopyArray),
-      //     };
-      //   }
-      // });
-    });
+    const examination = LoadToggle[typeName].indexOf(target);
+    if (examination === -1) {
+      dispatch(IndexAction({ target, typeName }));
+    } else {
+      dispatch(RemoveAction({ target, typeName }));
+    }
   }
-
-  useEffect(() => {
-    console.log(toggle);
-  }, [toggle]);
 
   return (
     <article className="list">
       <div className="list-header">
-        {/* {toggle.toggleArray.includes(index) ? (
+        {LoadToggle.titleIndex.includes(index) ? (
           <>
             <TextArea
               className="title-area"
@@ -91,8 +55,8 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
               type="button"
               className="submit"
               data-index={index}
-              name="toggleArray"
-              onClick={(e) => TotalToggle(e, toggle.toggleArray)}
+              name="titleIndex"
+              onClick={(e) => totalToggle(e)}
             >
               <FontAwesomeIcon icon={iconObject.faCheck} size="1x" />
             </button>
@@ -113,20 +77,20 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
               type="button"
               data-index={index}
               className="changer"
-              name="toggleArray"
-              onClick={(e) => TotalToggle(e, toggle.toggleArray)}
+              name="titleIndex"
+              onClick={(e) => totalToggle(e)}
             >
               <FontAwesomeIcon icon={iconObject.faEllipsis} size="1x" />
             </button>
           </>
-        )} */}
+        )}
       </div>
       <div className="list-body">
         <article className="card">
           <ul className="label-wrap">
             <li className="show-label"></li>
           </ul>
-          {/* {toggle.conToggle.includes(index) ? (
+          {LoadToggle.conIndex.includes(index) ? (
             <div
               className="text_wrap"
               style={{ flexDirection: "column", alignItems: "flex-start" }}
@@ -135,7 +99,7 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
                 className={`card-text`}
                 defaultValue={value.content}
                 ref={conFocus}
-                name="conToggle"
+                name="conIndex"
                 onChange={(e) => onchangeContent(e)}
                 minRows={conHeight}
                 style={{
@@ -160,32 +124,18 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
               <button
                 type="button"
                 data-index={index}
-                name="conToggle"
-                onClick={(e) => TotalToggle(e, toggle.conToggle)}
+                name="conIndex"
+                onClick={(e) => totalToggle(e)}
               >
                 <FontAwesomeIcon icon={iconObject.faPencil} size="1x" />
               </button>
             </div>
-          )} */}
+          )}
 
           <div className="icon_wrap">
             <FontAwesomeIcon icon={iconObject.faList} size="1x" />
           </div>
         </article>
-
-        <button
-          type="button"
-          className="board-add"
-          name="addCard"
-          data-index={index}
-          onClick={(e) => {
-            dispatch(CardAction());
-            TotalToggle(e, toggle.addCard);
-          }}
-        >
-          <FontAwesomeIcon icon={iconObject.faPlus} size="1x" />
-          Add a card
-        </button>
       </div>
     </article>
   );
