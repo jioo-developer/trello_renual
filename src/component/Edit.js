@@ -1,4 +1,4 @@
-import { React, useCallback, useState } from "react";
+import { React, useCallback, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ReactTextareaAutosize from "react-textarea-autosize";
@@ -20,14 +20,14 @@ function Edit({ id, index, searchDB }) {
 
   async function createCard(e) {
     e.preventDefault();
-    const length = searchDB.get().then((data) => {
-      return data.docs.length;
+    const length = await searchDB.get().then((data) => {
+      return data.docs.length + 1;
     });
     await searchDB
       .doc(text)
       .set({
         header: text,
-        order: JSON.parse(length) + 1,
+        order: length,
       })
       .then(() => {
         searchDB.doc(text).collection("article").add({ content: "" });

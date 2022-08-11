@@ -28,18 +28,33 @@ function App() {
     faTrashRestore,
   };
 
+  const storageName = "dbName";
+
+  useEffect(() => {
+    loadCookie();
+  }, []);
+
+  function loadCookie() {
+    const load = JSON.parse(localStorage.getItem(storageName));
+    if (load !== null) {
+      setDBNAME(load);
+      setInit(true);
+    }
+  }
+
   async function LoginDB(e) {
     e.preventDefault();
     const dbValue = await db.collection(DBNAME);
-
     dbValue.get().then((data) => {
       if (data.docs.length === 0) {
         window.confirm("검색되는 DB가 없습니다. 새로 만드시겠습니까?");
+        localStorage.setItem(storageName, JSON.stringify(DBNAME));
         dbValue.doc("todo").set({
           header: "todo",
         });
       } else {
         setInit(true);
+        localStorage.setItem(storageName, JSON.stringify(DBNAME));
       }
     });
   }
