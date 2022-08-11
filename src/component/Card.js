@@ -3,9 +3,8 @@ import TextArea from "react-textarea-autosize";
 import UseInput from "../hook/UseInput";
 import Edit from "./Edit";
 import { useSelector } from "react-redux";
-import { CardAction, IndexAction, RemoveAction } from "../module/reducer";
+import { IndexAction, RemoveAction } from "../module/reducer";
 function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
-  const AddCard = useSelector((state) => state.CardToggle);
   const LoadToggle = useSelector((state) => state);
   const [header, setHeader] = UseInput("");
   const [content, setContent] = UseInput("");
@@ -136,6 +135,21 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
             <FontAwesomeIcon icon={iconObject.faList} size="1x" />
           </div>
         </article>
+        {LoadToggle.addIndex.includes(index) ? (
+          <Edit opener={"card"} index={index} />
+        ) : (
+          <button
+            className="board-add"
+            name="addIndex"
+            data-index={index}
+            onClick={(e) => {
+              totalToggle(e);
+            }}
+          >
+            <FontAwesomeIcon icon={iconObject.faPlus} size="1x" />
+            Add a card
+          </button>
+        )}
       </div>
     </article>
   );

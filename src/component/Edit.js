@@ -5,22 +5,13 @@ import ReactTextareaAutosize from "react-textarea-autosize";
 import { useSelector, useDispatch } from "react-redux";
 import { db } from "../Firebase";
 import "../asset/Edit.scss";
-import { CardAction, EditAction } from "../module/reducer";
+import { EditAction, RemoveAction } from "../module/reducer";
 import useInput from "../hook/UseInput";
 const searchDB = db.collection("section");
 
-function Edit({ ID }) {
+function Edit({ id, index }) {
   const dispatch = useDispatch();
   const [text, setText] = useInput("");
-
-  function CloseAction(e) {
-    const target = e.currentTarget;
-    if (target.id === "creator") {
-      dispatch(EditAction());
-    } else {
-      dispatch(CardAction());
-    }
-  }
 
   const onchangeText = useCallback(
     (e) => {
@@ -40,6 +31,17 @@ function Edit({ ID }) {
         searchDB.doc(text).collection("article").add({ content: "" });
       });
   }
+
+  function closeAction(e) {
+    const current = e.currentTarget.id;
+    if (current === "creator") {
+      dispatch(EditAction());
+    } else {
+      const target = parseInt(e.currentTarget.getAttribute("data-index"));
+      const typeName = e.currentTarget.name;
+      dispatch(RemoveAction({ target, typeName }));
+    }
+  }
   return (
     <form className="edit_area" onSubmit={createCard}>
       <ReactTextareaAutosize
@@ -56,9 +58,13 @@ function Edit({ ID }) {
         </button>
         <button
           type="button"
+          id={id}
+          name="addIndex"
+          data-index={index}
           className="close_btn"
-          id={ID}
-          onClick={(e) => CloseAction(e)}
+          onClick={(e) => {
+            closeAction(e);
+          }}
         >
           <FontAwesomeIcon icon={faXmark} size="1x" />
         </button>

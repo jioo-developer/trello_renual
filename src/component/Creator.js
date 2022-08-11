@@ -7,7 +7,7 @@ function Creator({ FontAwesomeIcon, iconObject, dispatch }) {
   return (
     <>
       {create ? (
-        <Edit ID={"creator"} />
+        <Edit opener="creator" />
       ) : (
         <article
           className="another-list"

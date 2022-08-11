@@ -1,6 +1,5 @@
 const initialState = {
   EditToggle: false,
-  CardToggle: false,
   titleIndex: [],
   conIndex: [],
   addIndex: [],
@@ -35,11 +34,6 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         EditToggle: !state.EditToggle,
-      };
-    case CardToggle:
-      return {
-        ...state,
-        CardToggle: !state.CardToggle,
       };
 
     case ToggleIndex:
