@@ -8,6 +8,7 @@ import {
   faPencil,
   faPlus,
   faXmark,
+  faTrashRestore,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./asset/App.scss";
@@ -23,6 +24,7 @@ function App() {
     faPencil,
     faPlus,
     faXmark,
+    faTrashRestore,
   };
   return (
     <div className="App">

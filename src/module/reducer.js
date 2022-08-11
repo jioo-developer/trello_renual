@@ -1,6 +1,6 @@
 const initialState = {
   EditToggle: false,
-  titleIndex: [],
+  deleteIndex: [],
   conIndex: [],
   addIndex: [],
 };

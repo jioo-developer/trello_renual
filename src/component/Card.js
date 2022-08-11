@@ -9,8 +9,6 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
   const [header, setHeader] = UseInput("");
   const [content, setContent] = UseInput("");
   const [conHeight, setConHeight] = useState(1);
-  const inputFocus = useRef();
-  const conFocus = useRef();
 
   const onchangeHeader = useCallback(
     (e) => {
@@ -40,48 +38,33 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
   return (
     <article className="list">
       <div className="list-header">
-        {LoadToggle.titleIndex.includes(index) ? (
-          <>
-            <TextArea
-              className="title-area"
-              defaultValue={value.header}
-              ref={inputFocus}
-              onChange={(e) => {
-                onchangeHeader(e);
-              }}
-            />
-            <button
-              type="button"
-              className="submit"
-              data-index={index}
-              name="titleIndex"
-              onClick={(e) => totalToggle(e)}
-            >
-              <FontAwesomeIcon icon={iconObject.faCheck} size="1x" />
-            </button>
-          </>
+        <TextArea
+          className="title-area"
+          defaultValue={value.header}
+          onChange={(e) => {
+            onchangeHeader(e);
+          }}
+        />
+        {LoadToggle.deleteIndex.includes(index) ? (
+          <button
+            type="button"
+            className="submit"
+            data-index={index}
+            name="deleteIndex"
+            onClick={(e) => totalToggle(e)}
+          >
+            <FontAwesomeIcon icon={iconObject.faTrashRestore} size="1x" />
+          </button>
         ) : (
-          <>
-            <TextArea
-              className="title-area"
-              defaultValue={value.header}
-              readOnly={true}
-              style={{
-                outline: "none",
-                background: "transparent",
-                cursor: "default",
-              }}
-            />
-            <button
-              type="button"
-              data-index={index}
-              className="changer"
-              name="titleIndex"
-              onClick={(e) => totalToggle(e)}
-            >
-              <FontAwesomeIcon icon={iconObject.faEllipsis} size="1x" />
-            </button>
-          </>
+          <button
+            type="button"
+            data-index={index}
+            className="changer"
+            name="deleteIndex"
+            onClick={(e) => totalToggle(e)}
+          >
+            <FontAwesomeIcon icon={iconObject.faEllipsis} size="1x" />
+          </button>
         )}
       </div>
       <div className="list-body">
@@ -97,10 +80,8 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
               <TextArea
                 className={`card-text`}
                 defaultValue={value.content}
-                ref={conFocus}
                 name="conIndex"
                 onChange={(e) => onchangeContent(e)}
-                minRows={conHeight}
                 style={{
                   outline: "none",
                   width: "99%",
@@ -113,7 +94,6 @@ function Card({ FontAwesomeIcon, iconObject, value, index, dispatch }) {
                 className={`card-text`}
                 defaultValue={value.content}
                 readOnly={true}
-                minRows={conHeight}
                 style={{
                   outline: "none",
                   background: "transparent",
