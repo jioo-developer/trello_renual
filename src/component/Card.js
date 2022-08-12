@@ -1,20 +1,20 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import TextArea from "react-textarea-autosize";
 import UseInput from "../hook/UseInput";
 import Edit from "./Edit";
 import { useSelector } from "react-redux";
 import { IndexAction, RemoveAction } from "../module/reducer";
-function Card({
-  FontAwesomeIcon,
-  iconObject,
-  value,
-  index,
-  dispatch,
-  searchDB,
-}) {
+function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
   const LoadToggle = useSelector((state) => state);
   const [header, setHeader] = UseInput("");
   const [content, setContent] = UseInput("");
+  const [conHeight, setHeight] = useState(1);
+
+  const typeIndex = {
+    deleteIndex: LoadToggle.deleteIndex.includes(value.id),
+    conIndex: LoadToggle.conIndex.includes(value.id),
+    addIndex: LoadToggle.addIndex.includes(value.id),
+  };
 
   const onchangeHeader = useCallback(
     (e) => {
@@ -31,7 +31,7 @@ function Card({
   );
 
   function totalToggle(e) {
-    const target = parseInt(e.currentTarget.getAttribute("data-index"));
+    const target = e.currentTarget.getAttribute("data-id");
     const typeName = e.currentTarget.name;
     const examination = LoadToggle[typeName].indexOf(target);
     if (examination === -1) {
@@ -41,95 +41,137 @@ function Card({
     }
   }
 
+  function deleteHandler(e) {
+    const deleteTarget = e.currentTarget.getAttribute("data-id");
+    const delCheck = window.confirm("정말 삭제하시겠습니까?");
+    if (delCheck) {
+      totalToggle(e);
+      searchDB.doc(deleteTarget).delete();
+    }
+  }
+
+  function focusHandler(e) {
+    const target = e.currentTarget;
+    target.previousElementSibling.focus();
+    target.previousElementSibling.select();
+    setHeight(5);
+  }
+
+  function titleChange(e) {
+    e.preventDefault();
+    const target = e.target.querySelector("input").getAttribute("data-id");
+    searchDB
+      .doc(target)
+      .update({
+        header: header,
+      })
+      .then(() => {
+        e.target.querySelector("input").blur();
+      });
+  }
+
   return (
     <article className="list" style={{ order: `${value.order}` }}>
-      <div className="list-header">
-        <TextArea
+      <form className="list-header" onSubmit={titleChange}>
+        <input
+          type="text"
           className="title-area"
+          data-id={value.id}
           defaultValue={value.header}
           onChange={(e) => {
             onchangeHeader(e);
           }}
         />
-        {LoadToggle.deleteIndex.includes(index) ? (
-          <button
-            type="button"
-            className="submit"
-            data-index={index}
-            name="deleteIndex"
-            onClick={(e) => totalToggle(e)}
-          >
+        <button
+          type="button"
+          className={typeIndex.deleteIndex ? "submit" : "changer"}
+          name="deleteIndex"
+          data-id={value.id}
+          onClick={(e) => {
+            if (typeIndex.deleteIndex) {
+              deleteHandler(e);
+            } else {
+              totalToggle(e);
+            }
+          }}
+        >
+          {typeIndex.deleteIndex ? (
             <FontAwesomeIcon icon={iconObject.faTrashRestore} size="1x" />
-          </button>
-        ) : (
-          <button
-            type="button"
-            data-index={index}
-            className="changer"
-            name="deleteIndex"
-            onClick={(e) => totalToggle(e)}
-          >
+          ) : (
             <FontAwesomeIcon icon={iconObject.faEllipsis} size="1x" />
-          </button>
-        )}
-      </div>
+          )}
+        </button>
+      </form>
       <div className="list-body">
         {value.content !== "" ? (
           <article className="card">
             <ul className="label-wrap">
               <li className="show-label"></li>
             </ul>
-            {LoadToggle.conIndex.includes(index) ? (
-              <div
-                className="text_wrap"
-                style={{ flexDirection: "column", alignItems: "flex-start" }}
-              >
-                <TextArea
-                  className={`card-text`}
-                  defaultValue={value.content}
-                  name="conIndex"
-                  onChange={(e) => onchangeContent(e)}
-                  style={{
-                    outline: "none",
-                    width: "99%",
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="text_wrap">
-                <TextArea
-                  className={`card-text`}
-                  defaultValue={value.content}
-                  readOnly={true}
-                  style={{
-                    outline: "none",
-                    background: "transparent",
-                    cursor: "default",
-                  }}
-                />
+            <div
+              className="text_wrap"
+              style={
+                typeIndex.conIndex
+                  ? {
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                    }
+                  : null
+              }
+            >
+              <TextArea
+                className="card-text"
+                defaultValue={value.content}
+                onChange={(e) => {
+                  if (typeIndex.conIndex) {
+                    onchangeContent(e);
+                  }
+                }}
+                // onFocus={typeIndex.conIndex ? focusHandler : null}
+                minRows={conHeight}
+                onBlur={() => {
+                  setHeight(1);
+                }}
+                readOnly={typeIndex.conIndex ? false : true}
+                style={
+                  typeIndex.conIndex
+                    ? {
+                        width: "99%",
+                      }
+                    : {
+                        outline: "none",
+                        background: "transparent",
+                        cursor: "default",
+                      }
+                }
+              />
+              {typeIndex.conIndex === false ? (
                 <button
                   type="button"
-                  data-index={index}
+                  data-id={value.id}
                   name="conIndex"
-                  onClick={(e) => totalToggle(e)}
+                  onClick={(e) => {
+                    totalToggle(e);
+                    focusHandler(e);
+                  }}
                 >
                   <FontAwesomeIcon icon={iconObject.faPencil} size="1x" />
                 </button>
-              </div>
-            )}
+              ) : null}
+            </div>
 
             <div className="icon_wrap">
               <FontAwesomeIcon icon={iconObject.faList} size="1x" />
             </div>
           </article>
         ) : null}
-        {LoadToggle.addIndex.includes(index) ? (
-          <Edit opener={"card"} index={index} searchDB={searchDB} />
+        {LoadToggle.addIndex.includes(value.id) ? (
+          <Edit opener="card" searchDB={searchDB} value={value} />
         ) : (
           <button
             className="board-add"
             name="addIndex"
-            data-index={index}
+            data-id={value.id}
             onClick={(e) => {
               totalToggle(e);
             }}

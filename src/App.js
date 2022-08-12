@@ -49,9 +49,17 @@ function App() {
       if (data.docs.length === 0) {
         window.confirm("검색되는 DB가 없습니다. 새로 만드시겠습니까?");
         localStorage.setItem(storageName, JSON.stringify(DBNAME));
-        dbValue.doc("todo").set({
-          header: "todo",
-        });
+        dbValue
+          .doc("todo")
+          .set({
+            header: "todo",
+          })
+          .then(() => {
+            dbValue.doc("todo").collection("article").add({ content: "" });
+          })
+          .then(() => {
+            window.location.reload();
+          });
       } else {
         setInit(true);
         localStorage.setItem(storageName, JSON.stringify(DBNAME));

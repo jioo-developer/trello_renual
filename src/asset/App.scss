@@ -112,7 +112,7 @@ header {
       align-items: center;
       color: #172b4d;
       font-size: 14px;
-      padding: 4px 8px 6px 8px;
+      padding: 0 8px 6px 8px;
       flex-direction: column;
 
       .card {
@@ -144,7 +144,6 @@ header {
           align-items: center;
           .fa-pencil {
             font-size: 0.8em;
-            display: none;
             cursor: pointer;
             background: #f7f7f7;
             padding: 5px;
@@ -200,10 +199,6 @@ header {
 
       .card:hover {
         cursor: pointer;
-      }
-
-      .card:hover .fa-pencil {
-        display: block;
       }
 
       .card:last-child {
@@ -318,4 +313,14 @@ button {
 
 .login::placeholder {
   color: #ccc7c7;
+}
+
+.logout {
+  color: #fff;
+  text-align: center;
+  text-decoration: underline;
+  position: absolute;
+  left: 50%;
+  bottom: 120px;
+  cursor: pointer;
 }

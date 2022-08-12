@@ -28,6 +28,7 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
         .onSnapshot((snapshot) => {
           snapshot.docs.forEach((data) => {
             let key = Object.assign(value, data.data());
+            key.pageId = data.id;
             arr2.push(key);
           });
           if (list.length < arr2.length) {
@@ -46,11 +47,11 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
             return (
               <Card
                 value={value}
-                index={index}
                 FontAwesomeIcon={FontAwesomeIcon}
                 iconObject={iconObject}
                 dispatch={dispatch}
                 searchDB={searchDB}
+                key={index}
               />
             );
           })
@@ -61,6 +62,16 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
         dispatch={dispatch}
         searchDB={searchDB}
       />
+      <button
+        type="button"
+        className="logout"
+        onClick={() => {
+          localStorage.removeItem("dbName");
+          window.location.reload();
+        }}
+      >
+        로그아웃
+      </button>
     </section>
   );
 }
