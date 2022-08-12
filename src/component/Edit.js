@@ -55,7 +55,15 @@ function Edit({ opener, searchDB, value }) {
     }
   }
   return (
-    <form className="edit_area" onSubmit={createCard}>
+    <form
+      className="edit_area"
+      onSubmit={createCard}
+      style={
+        opener === "card" && value.content === ""
+          ? { paddingTop: 0 }
+          : { paddingTop: 15 }
+      }
+    >
       <ReactTextareaAutosize
         className="board-edit"
         placeholder="Enter a title for this card..."

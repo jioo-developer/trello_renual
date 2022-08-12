@@ -122,15 +122,17 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
               <TextArea
                 className="card-text"
                 defaultValue={value.content}
+                data-id={value.id}
+                name="conIndex"
                 onChange={(e) => {
                   if (typeIndex.conIndex) {
                     onchangeContent(e);
                   }
                 }}
-                // onFocus={typeIndex.conIndex ? focusHandler : null}
                 minRows={conHeight}
-                onBlur={() => {
+                onBlur={(e) => {
                   setHeight(1);
+                  totalToggle(e);
                 }}
                 readOnly={typeIndex.conIndex ? false : true}
                 style={
@@ -165,21 +167,27 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
             </div>
           </article>
         ) : null}
-        {LoadToggle.addIndex.includes(value.id) ? (
-          <Edit opener="card" searchDB={searchDB} value={value} />
-        ) : (
-          <button
-            className="board-add"
-            name="addIndex"
-            data-id={value.id}
-            onClick={(e) => {
-              totalToggle(e);
-            }}
-          >
-            <FontAwesomeIcon icon={iconObject.faPlus} size="1x" />
-            Add a card
-          </button>
-        )}
+        <>
+          {typeIndex.conIndex ? (
+            <button type="submit" className="saveBtn">
+              POST
+            </button>
+          ) : typeIndex.addIndex ? (
+            <Edit opener="card" searchDB={searchDB} value={value} />
+          ) : (
+            <button
+              className="board-add"
+              name="addIndex"
+              data-id={value.id}
+              onClick={(e) => {
+                totalToggle(e);
+              }}
+            >
+              <FontAwesomeIcon icon={iconObject.faPlus} size="1x" />
+              Add a card
+            </button>
+          )}
+        </>
       </div>
     </article>
   );
