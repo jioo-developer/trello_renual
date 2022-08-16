@@ -1,23 +1,23 @@
-import { React, useCallback, useEffect } from "react";
+import { React, useCallback} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import ReactTextareaAutosize from "react-textarea-autosize";
+import TextArea from "react-textarea-autosize";
 import { useDispatch } from "react-redux";
-import "../asset/Edit.scss";
 import { EditAction, RemoveAction } from "../module/reducer";
 import useInput from "../hook/UseInput";
-
-function Edit({ opener, searchDB, value }) {
+import "../asset/Edit.scss";
+function Edit({opener,searchDB,value}) {
   const dispatch = useDispatch();
-  const [text, setText] = useInput("");
-  const onchangeText = useCallback(
+  const [text,setText] = useInput("");
+
+    const onchangeText = useCallback(
     (e) => {
       setText(e);
     },
     [text]
   );
 
-  async function createCard(e) {
+    async function createCard(e) {
     e.preventDefault();
     const current = e.target.querySelector("button").getAttribute("id");
     if (current === "creator") {
@@ -31,19 +31,20 @@ function Edit({ opener, searchDB, value }) {
           order: length,
         })
         .then(() => {
-          searchDB.doc(text).collection("article").add({ content: "" });
-        })
-        .then(() => {
           dispatch(EditAction());
         });
     } else {
-      const target = e.target.querySelector("button").getAttribute("data-id");
-      const textArea = e.target.querySelector("textarea").getAttribute("name");
-      searchDB.doc(target).collection("article").doc(textArea).update({
-        content: text,
-      });
+      const targetid = e.target.querySelector("button").getAttribute("data-id");
+      const target =  e.target.querySelector(".close_btn").getAttribute("data-id")
+      const typeName = e.target.querySelector(".close_btn").getAttribute("name")
+      searchDB.doc(targetid).collection("article").add({
+        content : text
+      }).then((()=>{
+        dispatch(RemoveAction({target,typeName}))
+      }))
     }
   }
+
   function closeAction(e) {
     const current = e.currentTarget.id;
     if (current === "creator") {
@@ -54,6 +55,7 @@ function Edit({ opener, searchDB, value }) {
       dispatch(RemoveAction({ target, typeName }));
     }
   }
+
   return (
     <form
       className="edit_area"
@@ -64,11 +66,10 @@ function Edit({ opener, searchDB, value }) {
           : { paddingTop: 15 }
       }
     >
-      <ReactTextareaAutosize
+      <TextArea
         className="board-edit"
         placeholder="Enter a title for this card..."
         minRows={3}
-        cacheMeasurements
         onHeightChange={(height) => {}}
         name={opener === "card" ? value.pageId : ""}
         onChange={(e) => onchangeText(e)}
@@ -96,7 +97,7 @@ function Edit({ opener, searchDB, value }) {
         </button>
       </div>
     </form>
-  );
+  )
 }
 
-export default Edit;
+export default Edit

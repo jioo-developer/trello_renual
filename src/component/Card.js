@@ -4,18 +4,16 @@ import UseInput from "../hook/UseInput";
 import Edit from "./Edit";
 import { useSelector } from "react-redux";
 import { IndexAction, RemoveAction } from "../module/reducer";
-function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
+function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB,index }) {
   const LoadToggle = useSelector((state) => state);
   const [header, setHeader] = UseInput("");
   const [content, setContent] = UseInput("");
   const [conHeight, setHeight] = useState(1);
-
   const typeIndex = {
     deleteIndex: LoadToggle.deleteIndex.includes(value.id),
     conIndex: LoadToggle.conIndex.includes(value.id),
     addIndex: LoadToggle.addIndex.includes(value.id),
   };
-
   const onchangeHeader = useCallback(
     (e) => {
       setHeader(e);
@@ -102,9 +100,19 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
           )}
         </button>
       </form>
-      <div className="list-body">
-        {value.content !== "" ? (
-          <article className="card">
+          <div className="list-body">
+            {
+              value.contents.filter((value,idx,arr)=>{
+              return (
+                arr.findIndex((item)=>{
+                  return (
+                    item.content === value.content
+                  )
+                }) === idx
+              )
+            }).map((value2)=>{
+                return <>
+                 <article className="card">
             <ul className="label-wrap">
               <li className="show-label"></li>
             </ul>
@@ -121,7 +129,7 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
             >
               <TextArea
                 className="card-text"
-                defaultValue={value.content}
+                defaultValue={value2.content}
                 data-id={value.id}
                 name="conIndex"
                 onChange={(e) => {
@@ -166,8 +174,10 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
               <FontAwesomeIcon icon={iconObject.faList} size="1x" />
             </div>
           </article>
-        ) : null}
-        <>
+                </>
+              })
+            }
+             <>
           {typeIndex.conIndex ? (
             <button type="submit" className="saveBtn">
               POST
@@ -188,7 +198,7 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
             </button>
           )}
         </>
-      </div>
+          </div>
     </article>
   );
 }

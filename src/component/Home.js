@@ -8,37 +8,48 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   const searchDB = db.collection(DBNAME);
 
   useEffect(() => {
-    searchDB.onSnapshot((snapshot) => {
-      const header = snapshot.docs.map((data, index) => {
-        return {
-          ...data.data(),
-          id: data.id,
-        };
-      });
-      conneting(header);
+      searchDB.onSnapshot((snapshot) => {
+        const header = snapshot.docs.map((data, index) => {
+          return {
+            ...data.data(),
+            id: data.id
+          };
+        });
+        conneting(header);
     });
   }, []);
 
   const conneting = (arr) => {
     let arr2 = [];
-    arr.map((value) => {
+    arr.map((value,index) => {
+      value.contents = []
+      value.pages = []
       return searchDB
         .doc(value.id)
         .collection("article")
         .onSnapshot((snapshot) => {
           snapshot.docs.forEach((data) => {
-            let key = Object.assign(value, data.data());
-            key.pageId = data.id;
-            arr2.push(key);
+            value.contents.push(data.data())
+            value.pages.push(data.id)
+          });
+            arr2.push(value);
+          const result = arr2.filter((value, idx, arr) => {
+            return (
+              arr.findIndex(
+                (item) => {
+                return (
+                item.order === value.order && item.id === value.id && item.contents === value.contents && item.pages === value.pages 
+                 )
+               }) === idx
+          );
           });
           if (list.length < arr2.length) {
-            let copyArray = [...list];
-            copyArray.push(...arr2);
-            setList(copyArray);
+            setList(result)
           }
         });
     });
   };
+
 
   return (
     <section className="board_wrap">
@@ -51,7 +62,8 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
                 iconObject={iconObject}
                 dispatch={dispatch}
                 searchDB={searchDB}
-                key={index}
+                key={`key-${index}`}
+                index={index}
               />
             );
           })
