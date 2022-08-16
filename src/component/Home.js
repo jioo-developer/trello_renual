@@ -4,52 +4,58 @@ import Creator from "./Creator";
 import Card from "./Card";
 function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   const dispatch = useDispatch();
+  const [connectArray, setConnet] = useState([]);
   const [list, setList] = useState([]);
   const searchDB = db.collection(DBNAME);
 
   useEffect(() => {
-      searchDB.onSnapshot((snapshot) => {
-        const header = snapshot.docs.map((data, index) => {
-          return {
-            ...data.data(),
-            id: data.id
-          };
-        });
-        conneting(header);
+    searchDB.onSnapshot((snapshot) => {
+      const header = snapshot.docs.map((data) => {
+        return {
+          ...data.data(),
+          id: data.id,
+          contents: [],
+          pages: [],
+        };
+      });
+      setConnet(header);
     });
   }, []);
 
-  const conneting = (arr) => {
-    let arr2 = [];
-    arr.map((value,index) => {
-      value.contents = []
-      value.pages = []
-      return searchDB
-        .doc(value.id)
+  useEffect(() => {
+    if (connectArray !== 0) {
+      request();
+    }
+  }, [connectArray]);
+
+  async function request() {
+    await Promise.all(connectArray.map((item) => connecting(item))).then(
+      (result) => {
+        setList(result);
+      }
+    );
+  }
+
+  function connecting(item) {
+    return new Promise(function (resolve) {
+      searchDB
+        .doc(item.id)
         .collection("article")
         .onSnapshot((snapshot) => {
-          snapshot.docs.forEach((data) => {
-            value.contents.push(data.data())
-            value.pages.push(data.id)
+          snapshot.docs.forEach((value) => {
+            item.contents.push(value.data());
+            item.pages.push(value.id);
           });
-            arr2.push(value);
-          const result = arr2.filter((value, idx, arr) => {
-            return (
-              arr.findIndex(
-                (item) => {
-                return (
-                item.order === value.order && item.id === value.id && item.contents === value.contents && item.pages === value.pages 
-                 )
-               }) === idx
-          );
-          });
-          if (list.length < arr2.length) {
-            setList(result)
-          }
+          resolve(item);
         });
     });
-  };
+  }
 
+  useEffect(() => {
+    if (list.length !== 0) {
+      console.log(list);
+    }
+  }, [list]);
 
   return (
     <section className="board_wrap">
