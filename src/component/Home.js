@@ -42,8 +42,10 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
         .doc(item.id)
         .collection("article")
         .onSnapshot((snapshot) => {
+          item.contents = [];
           snapshot.docs.forEach((value) => {
             item.contents.push(value.data());
+            console.log(item.contents);
             item.pages.push(value.id);
           });
           resolve(item);
