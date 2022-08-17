@@ -3,7 +3,12 @@ import TextArea from "react-textarea-autosize";
 import UseInput from "../hook/UseInput";
 import Edit from "./Edit";
 import { useSelector } from "react-redux";
-import { IndexAction, RemoveAction } from "../module/reducer";
+import {
+  eachAction,
+  IndexAction,
+  RemoveAction,
+  RemoveEach,
+} from "../module/reducer";
 import CardTitleArea from "./CardTitleArea";
 function Card({
   FontAwesomeIcon,
@@ -14,6 +19,7 @@ function Card({
   index,
 }) {
   const LoadToggle = useSelector((state) => state);
+  const cardIndex = useSelector((state) => state.cardNum);
   const [content, setContent] = UseInput("");
   const typeIndex = {
     deleteIndex: LoadToggle.deleteIndex.includes(value.id),
@@ -39,10 +45,33 @@ function Card({
     }
   }
 
+  function CardEach(e, type) {
+    const target = e.currentTarget.getAttribute("id");
+    if (type === undefined) {
+      dispatch(eachAction(target));
+    } else {
+      dispatch(RemoveEach(target));
+    }
+  }
+
   function focusHandler(e) {
     const target = e.currentTarget;
     target.previousElementSibling.focus();
     target.previousElementSibling.select();
+  }
+
+  function contentUpdate(e) {
+    const target = e.target.getAttribute("data-id");
+    searchDB
+      .doc(value.id)
+      .collection("article")
+      .doc(target)
+      .update({
+        content: content,
+      })
+      .then(() => {
+        totalToggle(e);
+      });
   }
 
   return (
@@ -87,7 +116,10 @@ function Card({
                       onchangeContent(e);
                     }
                   }}
-                  onBlur={(e) => totalToggle(e, "blur")}
+                  onBlur={(e) => {
+                    totalToggle(e, "blur");
+                    CardEach(e, "blur");
+                  }}
                   readOnly={typeIndex.conIndex ? false : true}
                   style={
                     typeIndex.conIndex
@@ -110,6 +142,7 @@ function Card({
                     onClick={(e) => {
                       totalToggle(e);
                       focusHandler(e);
+                      CardEach(e);
                     }}
                   >
                     <FontAwesomeIcon icon={iconObject.faPencil} size="1x" />
@@ -120,15 +153,22 @@ function Card({
               <div className="icon_wrap">
                 <FontAwesomeIcon icon={iconObject.faList} size="1x" />
               </div>
+              {typeIndex.conIndex && cardIndex.includes(value.pages[index]) ? (
+                <button
+                  type="button"
+                  className="saveBtn"
+                  style={{ order: 9999 }}
+                  onClick={(e) => contentUpdate(e)}
+                  data-id={value.pages[index]}
+                >
+                  POST
+                </button>
+              ) : null}
             </article>
           );
         })}
         <>
-          {typeIndex.conIndex ? (
-            <button type="submit" className="saveBtn" style={{ order: 9999 }}>
-              POST
-            </button>
-          ) : typeIndex.addIndex ? (
+          {typeIndex.addIndex ? (
             <Edit opener="card" searchDB={searchDB} value={value} />
           ) : (
             <button
