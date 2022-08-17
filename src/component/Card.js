@@ -1,30 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback } from "react";
 import TextArea from "react-textarea-autosize";
 import UseInput from "../hook/UseInput";
 import Edit from "./Edit";
 import { useSelector } from "react-redux";
 import { IndexAction, RemoveAction } from "../module/reducer";
+import CardTitleArea from "./CardTitleArea";
 function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
-  console.log(value);
   const LoadToggle = useSelector((state) => state);
-  const [header, setHeader] = useState("");
   const [content, setContent] = UseInput("");
-
-  useEffect(() => {
-    setHeader(value.header);
-  }, []);
 
   const typeIndex = {
     deleteIndex: LoadToggle.deleteIndex.includes(value.id),
     conIndex: LoadToggle.conIndex.includes(value.id),
     addIndex: LoadToggle.addIndex.includes(value.id),
   };
-  const onchangeHeader = useCallback(
-    (e) => {
-      setHeader(e.target.value);
-    },
-    [header]
-  );
 
   const onchangeContent = useCallback(
     (e) => {
@@ -44,74 +33,22 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
     }
   }
 
-  function deleteHandler(e) {
-    const deleteTarget = e.currentTarget.getAttribute("data-id");
-    const delCheck = window.confirm("정말 삭제하시겠습니까?");
-    if (delCheck) {
-      totalToggle(e);
-      searchDB.doc(deleteTarget).delete();
-    }
-  }
-
   function focusHandler(e) {
     const target = e.currentTarget;
     target.previousElementSibling.focus();
     target.previousElementSibling.select();
   }
 
-  async function titleChange(e) {
-    e.preventDefault();
-    const target = e.target.getAttribute("data-id");
-    await searchDB
-      .doc(target)
-      .update({
-        header: header,
-      })
-      .then(() => {
-        e.target.blur();
-      });
-  }
-
-  function titleEnter(e) {
-    if (e.keyCode === 13) {
-      titleChange(e);
-    }
-  }
-
   return (
     <article className="list" style={{ order: `${value.order}` }}>
-      <form className="list-header">
-        <input
-          type="text"
-          className="title-area"
-          data-id={value.id}
-          value={header}
-          onKeyDown={(e) => titleEnter(e)}
-          onChange={(e) => {
-            onchangeHeader(e);
-          }}
-        />
-        <input type="text" style={{ display: "none" }} />
-        <button
-          type="button"
-          className={typeIndex.deleteIndex ? "submit" : "changer"}
-          name="deleteIndex"
-          data-id={value.id}
-          onClick={(e) => {
-            if (typeIndex.deleteIndex) {
-              deleteHandler(e);
-            } else {
-              totalToggle(e);
-            }
-          }}
-        >
-          {typeIndex.deleteIndex ? (
-            <FontAwesomeIcon icon={iconObject.faTrashRestore} size="1x" />
-          ) : (
-            <FontAwesomeIcon icon={iconObject.faEllipsis} size="1x" />
-          )}
-        </button>
-      </form>
+      <CardTitleArea
+        value={value}
+        searchDB={searchDB}
+        typeIndex={typeIndex}
+        totalToggle={totalToggle}
+        FontAwesomeIcon={FontAwesomeIcon}
+        iconObject={iconObject}
+      />
       <div className="list-body">
         {value.contents.map((item) => {
           return (

@@ -52,12 +52,6 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
     });
   }
 
-  useEffect(() => {
-    if (list.length !== 0) {
-      console.log(list);
-    }
-  }, [list]);
-
   return (
     <section className="board_wrap">
       {list.length !== 0
