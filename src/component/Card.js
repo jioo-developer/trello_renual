@@ -1,13 +1,19 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import TextArea from "react-textarea-autosize";
 import UseInput from "../hook/UseInput";
 import Edit from "./Edit";
 import { useSelector } from "react-redux";
 import { IndexAction, RemoveAction } from "../module/reducer";
 function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
+  console.log(value);
   const LoadToggle = useSelector((state) => state);
-  const [header, setHeader] = UseInput("");
+  const [header, setHeader] = useState("");
   const [content, setContent] = UseInput("");
+
+  useEffect(() => {
+    setHeader(value.header);
+  }, []);
+
   const typeIndex = {
     deleteIndex: LoadToggle.deleteIndex.includes(value.id),
     conIndex: LoadToggle.conIndex.includes(value.id),
@@ -15,7 +21,7 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
   };
   const onchangeHeader = useCallback(
     (e) => {
-      setHeader(e);
+      setHeader(e.target.value);
     },
     [header]
   );
@@ -53,31 +59,39 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
     target.previousElementSibling.select();
   }
 
-  function titleChange(e) {
+  async function titleChange(e) {
     e.preventDefault();
-    const target = e.target.querySelector("input").getAttribute("data-id");
-    searchDB
+    const target = e.target.getAttribute("data-id");
+    await searchDB
       .doc(target)
       .update({
         header: header,
       })
       .then(() => {
-        e.target.querySelector("input").blur();
+        e.target.blur();
       });
+  }
+
+  function titleEnter(e) {
+    if (e.keyCode === 13) {
+      titleChange(e);
+    }
   }
 
   return (
     <article className="list" style={{ order: `${value.order}` }}>
-      <form className="list-header" onSubmit={titleChange}>
+      <form className="list-header">
         <input
           type="text"
           className="title-area"
           data-id={value.id}
-          defaultValue={value.header}
+          value={header}
+          onKeyDown={(e) => titleEnter(e)}
           onChange={(e) => {
             onchangeHeader(e);
           }}
         />
+        <input type="text" style={{ display: "none" }} />
         <button
           type="button"
           className={typeIndex.deleteIndex ? "submit" : "changer"}
