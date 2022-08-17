@@ -28,18 +28,14 @@ function Card({
     [content]
   );
 
-  function totalToggle(e) {
-    if (!e.target.type === "textarea") {
-      const target = e.currentTarget.getAttribute("data-id");
-      const typeName = e.currentTarget.name;
-      const examination = LoadToggle[typeName].indexOf(target);
-      if (examination === -1) {
-        dispatch(IndexAction({ target, typeName }));
-      } else {
-        dispatch(RemoveAction({ target, typeName }));
-      }
+  function totalToggle(e, type) {
+    const target = e.currentTarget.getAttribute("data-id");
+    const typeName = e.currentTarget.name;
+    const examination = LoadToggle[typeName].indexOf(target);
+    if (examination === -1 && type === undefined) {
+      dispatch(IndexAction({ target, typeName }));
     } else {
-      console.log("textarae");
+      dispatch(RemoveAction({ target, typeName }));
     }
   }
 
@@ -91,9 +87,7 @@ function Card({
                       onchangeContent(e);
                     }
                   }}
-                  onBlur={(e) => {
-                    totalToggle(e);
-                  }}
+                  onBlur={(e) => totalToggle(e, "blur")}
                   readOnly={typeIndex.conIndex ? false : true}
                   style={
                     typeIndex.conIndex
@@ -112,6 +106,7 @@ function Card({
                     type="button"
                     data-id={value.id}
                     name="conIndex"
+                    id={value.pages[index]}
                     onClick={(e) => {
                       totalToggle(e);
                       focusHandler(e);
