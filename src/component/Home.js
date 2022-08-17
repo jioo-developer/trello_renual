@@ -45,7 +45,6 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
           item.contents = [];
           snapshot.docs.forEach((value) => {
             item.contents.push(value.data());
-            console.log(item.contents);
             item.pages.push(value.id);
           });
           resolve(item);

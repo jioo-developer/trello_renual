@@ -102,7 +102,7 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
         {value.contents.map((item) => {
           return (
             <>
-              <article className="card">
+              <article className="card" style={{ order: item.order }}>
                 <ul className="label-wrap">
                   <li className="show-label"></li>
                 </ul>
@@ -120,7 +120,7 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
                   <TextArea
                     className="card-text"
                     defaultValue={item.content}
-                    data-id={item.id}
+                    data-id={value.id}
                     name="conIndex"
                     onChange={(e) => {
                       if (typeIndex.conIndex) {
@@ -146,7 +146,7 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
                   {typeIndex.conIndex === false ? (
                     <button
                       type="button"
-                      data-id={item.id}
+                      data-id={value.id}
                       name="conIndex"
                       onClick={(e) => {
                         totalToggle(e);
@@ -167,7 +167,7 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
         })}
         <>
           {typeIndex.conIndex ? (
-            <button type="submit" className="saveBtn">
+            <button type="submit" className="saveBtn" style={{ order: 9999 }}>
               POST
             </button>
           ) : typeIndex.addIndex ? (

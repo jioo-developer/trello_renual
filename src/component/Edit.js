@@ -1,4 +1,4 @@
-import { React, useCallback} from "react";
+import { React, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import TextArea from "react-textarea-autosize";
@@ -6,43 +6,31 @@ import { useDispatch } from "react-redux";
 import { EditAction, RemoveAction } from "../module/reducer";
 import useInput from "../hook/UseInput";
 import "../asset/Edit.scss";
-function Edit({opener,searchDB,value}) {
+function Edit({ opener, searchDB, value }) {
   const dispatch = useDispatch();
-  const [text,setText] = useInput("");
+  const [text, setText] = useInput("");
 
-    const onchangeText = useCallback(
+  const onchangeText = useCallback(
     (e) => {
       setText(e);
     },
     [text]
   );
 
-    async function createCard(e) {
+  async function createCard(e) {
     e.preventDefault();
-    const current = e.target.querySelector("button").getAttribute("id");
-    if (current === "creator") {
-      const length = await searchDB.get().then((data) => {
-        return data.docs.length + 1;
+    const length = await searchDB.get().then((data) => {
+      return data.docs.length + 1;
+    });
+    await searchDB
+      .doc(text)
+      .set({
+        header: text,
+        order: length,
+      })
+      .then(() => {
+        dispatch(EditAction());
       });
-      await searchDB
-        .doc(text)
-        .set({
-          header: text,
-          order: length,
-        })
-        .then(() => {
-          dispatch(EditAction());
-        });
-    } else {
-      const targetid = e.target.querySelector("button").getAttribute("data-id");
-      const target =  e.target.querySelector(".close_btn").getAttribute("data-id")
-      const typeName = e.target.querySelector(".close_btn").getAttribute("name")
-      searchDB.doc(targetid).collection("article").add({
-        content : text
-      }).then((()=>{
-        dispatch(RemoveAction({target,typeName}))
-      }))
-    }
   }
 
   function closeAction(e) {
@@ -56,10 +44,33 @@ function Edit({opener,searchDB,value}) {
     }
   }
 
+  async function newCard(e) {
+    e.preventDefault();
+    const targetid = funcFAC("button", "data-id", e);
+    const target = funcFAC(".close_btn", "data-id", e);
+    const typeName = funcFAC(".close_btn", "name", e);
+    const targetDB = searchDB.doc(targetid).collection("article");
+    const articleLength = await targetDB.get().then((data) => {
+      return data.docs.length + 1;
+    });
+    targetDB
+      .add({
+        content: text,
+        order: articleLength,
+      })
+      .then(() => {
+        dispatch(RemoveAction({ target, typeName }));
+      });
+  }
+
+  function funcFAC(current, tag, e) {
+    return e.target.querySelector(current).getAttribute(tag);
+  }
+
   return (
     <form
       className="edit_area"
-      onSubmit={createCard}
+      onSubmit={opener === "card" ? newCard : createCard}
       style={
         opener === "card" && value.content === ""
           ? { paddingTop: 0 }
@@ -97,7 +108,7 @@ function Edit({opener,searchDB,value}) {
         </button>
       </div>
     </form>
-  )
+  );
 }
 
-export default Edit
+export default Edit;
