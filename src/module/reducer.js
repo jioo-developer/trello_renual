@@ -76,7 +76,7 @@ export default function reducer(state = initialState, action) {
     case RemoveNUM:
       return {
         ...state,
-        cardNum: [...state.cardNum].filter((taget) => taget == action.data),
+        cardNum: [...state.cardNum].filter((taget) => taget !== action.data),
       };
 
     default:

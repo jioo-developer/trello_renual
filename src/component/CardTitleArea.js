@@ -42,7 +42,7 @@ function CardTitleArea({
     if (delCheck) {
       searchDB.doc(deleteTarget).delete();
     }
-    totalToggle(e);
+    // totalToggle(e);
   }
 
   return (
@@ -62,7 +62,7 @@ function CardTitleArea({
         type="button"
         className={typeIndex.deleteIndex ? "submit" : "changer"}
         name="deleteIndex"
-        data-id={value.id}
+        data-id={`${value.id}-btn`}
         onClick={(e) => {
           if (typeIndex.deleteIndex) {
             deleteHandler(e);
