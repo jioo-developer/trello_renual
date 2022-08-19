@@ -9,7 +9,6 @@ function CardTitleArea({
   iconObject,
 }) {
   const [header, setHeader] = useState("");
-  console.log(value.id);
   useEffect(() => {
     setHeader(value.header);
   }, []);
