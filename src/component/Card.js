@@ -1,11 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import {
-  addIndexAction,
-  eachAction,
-  RemoveAction,
-  RemoveEach,
-} from "../module/reducer";
+import { addIndexAction, RemoveAction } from "../module/reducer";
 import CardTitleArea from "./CardTitleArea";
 import CardBody from "./CardBody";
 function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
@@ -15,32 +10,28 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
     addIndex: LoadToggle.addIndex.includes(value.id),
   };
 
-  function totalToggle(e, type) {
+  function totalToggle(e) {
     let target = value.id;
     const current = e.currentTarget;
     const typeName = current.getAttribute("name");
-    const examination = LoadToggle[typeName].indexOf(target);
+    let examination = LoadToggle[typeName].indexOf(target);
 
     if (typeName === "deleteIndex") {
-      dispatcher(examination, type, typeName, target);
+      dispatcher(examination, typeName, target);
       //
     } else if (typeName === "cardNum") {
       let num = current.closest(".card").getAttribute("data-index");
       target = value.pages[num];
-      //
-      if (examination === -1 && type === undefined) {
-        dispatch(eachAction(target, typeName));
-      } else {
-        dispatch(RemoveEach(target, typeName));
-      }
+      examination = LoadToggle[typeName].indexOf(target);
+      dispatcher(examination, typeName, target);
       //
     } else if (typeName === "addIndex") {
-      dispatcher(examination, type, typeName, target);
+      dispatcher(examination, typeName, target);
     }
   }
 
-  function dispatcher(examination, type, typeName, target) {
-    if (examination === -1 && type === undefined) {
+  function dispatcher(examination, typeName, target) {
+    if (examination === -1) {
       dispatch(addIndexAction({ target, typeName }));
     } else {
       dispatch(RemoveAction({ target, typeName }));

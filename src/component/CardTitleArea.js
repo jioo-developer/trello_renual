@@ -9,6 +9,7 @@ function CardTitleArea({
   iconObject,
 }) {
   const [header, setHeader] = useState("");
+  console.log(value.id);
   useEffect(() => {
     setHeader(value.header);
   }, []);
@@ -21,12 +22,11 @@ function CardTitleArea({
   );
 
   async function titleEnter(e) {
+    console.log(e.target);
     if (e.keyCode === 13) {
       e.preventDefault();
-      // const target = e.target.getAttribute("data-id");
-      let target;
       await searchDB
-        .doc(target)
+        .doc(value.id)
         .update({
           header: header,
         })
@@ -37,13 +37,11 @@ function CardTitleArea({
   }
 
   function deleteHandler(e) {
-    // const deleteTarget = e.currentTarget.getAttribute("data-id");
-    let deleteTarget;
     const delCheck = window.confirm("정말 삭제하시겠습니까?");
     if (delCheck) {
-      searchDB.doc(deleteTarget).delete();
+      searchDB.doc(value.id).delete();
     }
-    // totalToggle(e);
+    totalToggle(e);
   }
 
   return (

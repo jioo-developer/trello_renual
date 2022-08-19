@@ -289,12 +289,10 @@ button {
 }
 
 .saveBtn {
-  background: #026aa7;
-  color: #fff;
   border-radius: 5px;
-  width: 76px;
-  height: 32px;
-  margin: 12px auto 5px 0;
+  width: 50px;
+  height: 27px;
+  cursor: pointer;
 }
 
 .login {
@@ -324,5 +322,12 @@ button {
   position: absolute;
   left: 50%;
   bottom: 120px;
+  cursor: pointer;
+}
+
+.saveCancel {
+  font-size: 14px;
+  text-decoration: underline;
+  margin-left: 5px;
   cursor: pointer;
 }

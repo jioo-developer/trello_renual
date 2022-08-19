@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import TextArea from "react-textarea-autosize";
 import Edit from "./Edit";
 import UseInput from "../hook/UseInput";
 import { useSelector } from "react-redux";
-import { addNum, RemoveEach } from "../module/reducer";
 function CardBody({
   value,
   typeIndex,
@@ -11,11 +10,9 @@ function CardBody({
   searchDB,
   FontAwesomeIcon,
   iconObject,
-  dispatch,
 }) {
   const [content, setContent] = UseInput("");
   const cardIndex = useSelector((state) => state.cardNum);
-  const numIndex = useSelector((state) => state.cardNum);
   const onchangeContent = useCallback(
     (e) => {
       setContent(e);
@@ -29,18 +26,12 @@ function CardBody({
     target.previousElementSibling.select();
   }
 
-  function contentUpdate(idx) {
+  function contentUpdate(e, idx) {
     const target = value.pages[idx];
-    // searchDB
-    //   .doc(value.id)
-    //   .collection("article")
-    //   .doc(target)
-    //   .update({
-    //     content: content,
-    //   })
-    //   .then(() => {
-    //     // totalToggle(e);
-    //   });
+    searchDB.doc(value.id).collection("article").doc(target).update({
+      content: content,
+    });
+    totalToggle(e);
   }
 
   return (
@@ -93,7 +84,6 @@ function CardBody({
                   onClick={(e) => {
                     totalToggle(e);
                     focusHandler(e);
-                    dispatch(addNum(index2));
                   }}
                 >
                   <FontAwesomeIcon icon={iconObject.faPencil} size="1x" />
@@ -105,14 +95,25 @@ function CardBody({
               <FontAwesomeIcon icon={iconObject.faList} size="1x" />
             </div>
             {cardIndex.includes(value.pages[index2]) ? (
-              <button
-                type="button"
-                className="saveBtn"
-                style={{ order: 9999 }}
-                onClick={contentUpdate(index2)}
-              >
-                POST
-              </button>
+              <div className="post-wrap" style={{ margin: "15px 0 5px 0" }}>
+                <button
+                  type="button"
+                  name="cardNum"
+                  className="saveBtn"
+                  style={{ order: 9999 }}
+                  onClick={(e) => contentUpdate(e, index2)}
+                >
+                  POST
+                </button>
+                <button
+                  type="button"
+                  name="cardNum"
+                  className="saveCancel"
+                  onClick={(e) => totalToggle(e)}
+                >
+                  cencel
+                </button>
+              </div>
             ) : null}
           </article>
         );
