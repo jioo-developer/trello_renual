@@ -23,14 +23,7 @@ function CardBody({
     [content]
   );
 
-  function CardEach(e, type) {
-    const target = e.currentTarget.getAttribute("id");
-    if (type === undefined) {
-      dispatch(eachAction(target));
-    } else {
-      dispatch(RemoveEach(target));
-    }
-  }
+  function CardEach(e, type) {}
 
   function focusHandler(e) {
     const target = e.currentTarget;
@@ -40,7 +33,6 @@ function CardBody({
 
   function contentUpdate(e) {
     const target = e.target.getAttribute("data-id");
-    console.log(target);
     searchDB
       .doc(value.id)
       .collection("article")
@@ -88,7 +80,6 @@ function CardBody({
                 }}
                 onBlur={(e) => {
                   totalToggle(e, "blur");
-                  CardEach(e, "blur");
                 }}
                 readOnly={typeIndex.conIndex ? false : true}
                 style={

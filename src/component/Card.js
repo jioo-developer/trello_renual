@@ -1,6 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { IndexAction, RemoveAction } from "../module/reducer";
+import {
+  addIndexAction,
+  eachAction,
+  RemoveAction,
+  RemoveEach,
+} from "../module/reducer";
 import CardTitleArea from "./CardTitleArea";
 import CardBody from "./CardBody";
 function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
@@ -10,22 +15,33 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
     conIndex: LoadToggle.conIndex.includes(value.id),
     addIndex: LoadToggle.addIndex.includes(value.id),
   };
-
   function totalToggle(e, type) {
-    const check = "-btn";
-    let target = e.currentTarget.getAttribute("data-id");
-    if (target === null) {
-      const num = e.currentTarget.closest(".card").getAttribute("data-index");
-      target = value.pages[num];
-    } else {
-      if (target.includes(check)) {
-        target = target.replace("-btn", "");
-      }
-    }
-    const typeName = e.currentTarget.name;
+    let target = value.id;
+    const current = e.currentTarget;
+    const typeName = current.getAttribute("name");
     const examination = LoadToggle[typeName].indexOf(target);
+
+    if (typeName === "deleteIndex") {
+      dispatcher(examination, type, typeName, target);
+    } else if (typeName === "conIndex") {
+      dispatcher(examination, type, typeName, target);
+      let num = current.closest(".card").getAttribute("data-index");
+      target = value.pages[num];
+      //
+      if (examination === -1 && type === undefined) {
+        dispatch(eachAction(target, typeName));
+      } else {
+        dispatch(RemoveEach(target, typeName));
+      }
+      //
+    } else if (typeName === "addIndex") {
+      dispatcher(examination, type, typeName, target);
+    }
+  }
+
+  function dispatcher(examination, type, typeName, target) {
     if (examination === -1 && type === undefined) {
-      dispatch(IndexAction({ target, typeName }));
+      dispatch(addIndexAction({ target, typeName }));
     } else {
       dispatch(RemoveAction({ target, typeName }));
     }

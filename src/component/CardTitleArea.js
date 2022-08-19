@@ -9,7 +9,6 @@ function CardTitleArea({
   iconObject,
 }) {
   const [header, setHeader] = useState("");
-
   useEffect(() => {
     setHeader(value.header);
   }, []);
@@ -24,7 +23,8 @@ function CardTitleArea({
   async function titleEnter(e) {
     if (e.keyCode === 13) {
       e.preventDefault();
-      const target = e.target.getAttribute("data-id");
+      // const target = e.target.getAttribute("data-id");
+      let target;
       await searchDB
         .doc(target)
         .update({
@@ -37,7 +37,8 @@ function CardTitleArea({
   }
 
   function deleteHandler(e) {
-    const deleteTarget = e.currentTarget.getAttribute("data-id");
+    // const deleteTarget = e.currentTarget.getAttribute("data-id");
+    let deleteTarget;
     const delCheck = window.confirm("정말 삭제하시겠습니까?");
     if (delCheck) {
       searchDB.doc(deleteTarget).delete();
@@ -50,7 +51,6 @@ function CardTitleArea({
       <input
         type="text"
         className="title-area"
-        data-id={value.id}
         value={header}
         onKeyDown={(e) => titleEnter(e)}
         onChange={(e) => {
@@ -60,9 +60,8 @@ function CardTitleArea({
       <input type="text" style={{ display: "none" }} />
       <button
         type="button"
-        className={typeIndex.deleteIndex ? "submit" : "changer"}
+        className="submit"
         name="deleteIndex"
-        data-id={`${value.id}-btn`}
         onClick={(e) => {
           if (typeIndex.deleteIndex) {
             deleteHandler(e);

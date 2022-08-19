@@ -22,7 +22,7 @@ export const CardAction = () => ({
   type: CardToggle,
 });
 
-export const IndexAction = (data) => ({
+export const addIndexAction = (data) => ({
   type: ToggleIndex,
   data,
 });
