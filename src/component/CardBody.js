@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import TextArea from "react-textarea-autosize";
 import Edit from "./Edit";
 import UseInput from "../hook/UseInput";
 import { useSelector } from "react-redux";
-import { RemoveEach } from "../module/reducer";
+import { addNum, RemoveEach } from "../module/reducer";
 function CardBody({
   value,
   typeIndex,
@@ -14,9 +14,8 @@ function CardBody({
   dispatch,
 }) {
   const [content, setContent] = UseInput("");
-  const [open, setOpen] = useState([]);
   const cardIndex = useSelector((state) => state.cardNum);
-
+  const numIndex = useSelector((state) => state.cardNum);
   const onchangeContent = useCallback(
     (e) => {
       setContent(e);
@@ -43,24 +42,6 @@ function CardBody({
     //     // totalToggle(e);
     //   });
   }
-
-  useEffect(() => {
-    if (open[1]) {
-      const point = Array.from(document.querySelectorAll(".card"));
-      const idx = open[0];
-      document.addEventListener("click", function (e) {
-        const tgEI = e.target === point[idx];
-        if (!tgEI) {
-          new Promise(function (resolve) {
-            dispatch(RemoveEach(value.pages[idx]));
-            resolve();
-          }).then(() => {
-            setOpen(["", false]);
-          });
-        }
-      });
-    }
-  }, [open]);
 
   return (
     <div className="list-body">
@@ -112,7 +93,7 @@ function CardBody({
                   onClick={(e) => {
                     totalToggle(e);
                     focusHandler(e);
-                    setOpen([index2, true]);
+                    dispatch(addNum(index2));
                   }}
                 >
                   <FontAwesomeIcon icon={iconObject.faPencil} size="1x" />

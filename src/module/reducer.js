@@ -3,11 +3,13 @@ const initialState = {
   deleteIndex: [],
   cardNum: [],
   addIndex: [],
+  indexNum: "",
 };
 
 const EditToggle = "EditToggle";
 const ToggleIndex = "toggleIndex";
 const RemoveIndex = "removeIndex";
+const IndexNum = "IndexNum";
 
 const CARDNUM = "CARDNUM";
 const RemoveNUM = "removeNum";
@@ -33,6 +35,11 @@ export const eachAction = (data) => ({
 
 export const RemoveEach = (data) => ({
   type: RemoveNUM,
+  data,
+});
+
+export const addNum = (data) => ({
+  type: IndexNum,
   data,
 });
 
@@ -71,6 +78,12 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         cardNum: [...state.cardNum].filter((taget) => taget !== action.data),
+      };
+
+    case IndexNum:
+      return {
+        ...state,
+        indexNum: action.data,
       };
 
     default:
