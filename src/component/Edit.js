@@ -37,7 +37,7 @@ function Edit({ opener, searchDB, value }) {
     if (current === "creator") {
       dispatch(EditAction());
     } else {
-      const target = e.currentTarget.getAttribute("data-id");
+      const target = value.id;
       const typeName = e.currentTarget.name;
       dispatch(RemoveAction({ target, typeName }));
     }
@@ -45,10 +45,9 @@ function Edit({ opener, searchDB, value }) {
 
   async function newCard(e) {
     e.preventDefault();
-    const targetid = funcFAC("button", "data-id", e);
-    const target = funcFAC(".close_btn", "data-id", e);
-    const typeName = funcFAC(".close_btn", "name", e);
-    const targetDB = searchDB.doc(targetid).collection("article");
+    const target = value.id;
+    const typeName = e.target.name;
+    const targetDB = searchDB.doc(target).collection("article");
     const articleLength = await targetDB.get().then((data) => {
       return data.docs.length + 1;
     });
@@ -62,12 +61,9 @@ function Edit({ opener, searchDB, value }) {
       });
   }
 
-  function funcFAC(current, tag, e) {
-    return e.target.querySelector(current).getAttribute(tag);
-  }
-
   return (
     <form
+      name="addIndex"
       className="edit_area"
       onSubmit={opener === "card" ? newCard : createCard}
       style={
@@ -85,12 +81,7 @@ function Edit({ opener, searchDB, value }) {
         onChange={(e) => onchangeText(e)}
       />
       <div className="edit_btn_wrap">
-        <button
-          type="submit"
-          className="add_btn"
-          id={opener}
-          data-id={opener === "card" ? value.id : ""}
-        >
+        <button type="submit" className="add_btn" id={opener}>
           POST
         </button>
         <button
@@ -98,7 +89,6 @@ function Edit({ opener, searchDB, value }) {
           id={opener}
           name="addIndex"
           className="close_btn"
-          data-id={opener === "card" ? value.id : ""}
           onClick={(e) => {
             closeAction(e);
           }}
