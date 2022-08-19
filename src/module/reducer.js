@@ -1,13 +1,11 @@
 const initialState = {
   EditToggle: false,
   deleteIndex: [],
-  conIndex: [],
-  addIndex: [],
   cardNum: [],
+  addIndex: [],
 };
 
 const EditToggle = "EditToggle";
-const CardToggle = "CardToggle";
 const ToggleIndex = "toggleIndex";
 const RemoveIndex = "removeIndex";
 
@@ -16,10 +14,6 @@ const RemoveNUM = "removeNum";
 
 export const EditAction = () => ({
   type: EditToggle,
-});
-
-export const CardAction = () => ({
-  type: CardToggle,
 });
 
 export const addIndexAction = (data) => ({

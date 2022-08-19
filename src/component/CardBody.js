@@ -1,9 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TextArea from "react-textarea-autosize";
 import Edit from "./Edit";
 import UseInput from "../hook/UseInput";
-import { eachAction, RemoveEach } from "../module/reducer";
 import { useSelector } from "react-redux";
+import { RemoveEach } from "../module/reducer";
 function CardBody({
   value,
   typeIndex,
@@ -14,6 +14,7 @@ function CardBody({
   dispatch,
 }) {
   const [content, setContent] = UseInput("");
+  const [open, setOpen] = useState([]);
   const cardIndex = useSelector((state) => state.cardNum);
 
   const onchangeContent = useCallback(
@@ -23,45 +24,56 @@ function CardBody({
     [content]
   );
 
-  function CardEach(e, type) {}
-
   function focusHandler(e) {
     const target = e.currentTarget;
     target.previousElementSibling.focus();
     target.previousElementSibling.select();
   }
 
-  function contentUpdate(e) {
-    const target = e.target.getAttribute("data-id");
-    searchDB
-      .doc(value.id)
-      .collection("article")
-      .doc(target)
-      .update({
-        content: content,
-      })
-      .then(() => {
-        totalToggle(e);
-      });
+  function contentUpdate(idx) {
+    const target = value.pages[idx];
+    // searchDB
+    //   .doc(value.id)
+    //   .collection("article")
+    //   .doc(target)
+    //   .update({
+    //     content: content,
+    //   })
+    //   .then(() => {
+    //     // totalToggle(e);
+    //   });
   }
+
+  useEffect(() => {
+    if (open[1]) {
+      const point = Array.from(document.querySelectorAll(".card"));
+      const idx = open[0];
+      document.addEventListener("click", function (e) {
+        const tgEI = e.target === point[idx];
+        if (!tgEI) {
+          new Promise(function (resolve) {
+            dispatch(RemoveEach(value.pages[idx]));
+            resolve();
+          }).then(() => {
+            setOpen(["", false]);
+          });
+        }
+      });
+    }
+  }, [open]);
 
   return (
     <div className="list-body">
-      {value.contents.map((item, index) => {
+      {value.contents.map((item, index2) => {
         return (
-          <article
-            className="card"
-            style={{ order: item.order }}
-            data-index={index}
-            key={`card-${index}`}
-          >
+          <article className="card" data-index={index2} key={`card-${index2}`}>
             <ul className="label-wrap">
               <li className="show-label"></li>
             </ul>
             <div
               className="text_wrap"
               style={
-                typeIndex.conIndex
+                cardIndex.includes(value.pages[index2])
                   ? {
                       flexDirection: "column",
                       alignItems: "flex-start",
@@ -72,18 +84,17 @@ function CardBody({
               <TextArea
                 className="card-text"
                 defaultValue={item.content}
-                name="conIndex"
+                name="cardNum"
                 onChange={(e) => {
-                  if (typeIndex.conIndex) {
+                  if (cardIndex.includes(value.pages[index2])) {
                     onchangeContent(e);
                   }
                 }}
-                onBlur={(e) => {
-                  totalToggle(e, "blur");
-                }}
-                readOnly={typeIndex.conIndex ? false : true}
+                readOnly={
+                  cardIndex.includes(value.pages[index2]) ? false : true
+                }
                 style={
-                  typeIndex.conIndex
+                  cardIndex.includes(value.pages[index2])
                     ? {
                         width: "99%",
                       }
@@ -94,14 +105,14 @@ function CardBody({
                       }
                 }
               />
-              {typeIndex.conIndex === false ? (
+              {cardIndex.includes(value.pages[index2]) === false ? (
                 <button
                   type="button"
-                  name="conIndex"
+                  name="cardNum"
                   onClick={(e) => {
                     totalToggle(e);
                     focusHandler(e);
-                    CardEach(e);
+                    setOpen([index2, true]);
                   }}
                 >
                   <FontAwesomeIcon icon={iconObject.faPencil} size="1x" />
@@ -112,12 +123,12 @@ function CardBody({
             <div className="icon_wrap">
               <FontAwesomeIcon icon={iconObject.faList} size="1x" />
             </div>
-            {typeIndex.conIndex && cardIndex.includes(value.pages[index]) ? (
+            {cardIndex.includes(value.pages[index2]) ? (
               <button
                 type="button"
                 className="saveBtn"
                 style={{ order: 9999 }}
-                onClick={(e) => contentUpdate(e)}
+                onClick={contentUpdate(index2)}
               >
                 POST
               </button>

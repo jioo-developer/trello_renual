@@ -23,10 +23,9 @@ function Edit({ opener, searchDB, value }) {
       return data.docs.length + 1;
     });
     await searchDB
-      .doc(text)
+      .doc(`0${length}`)
       .set({
         header: text,
-        order: length,
       })
       .then(() => {
         dispatch(EditAction());
@@ -54,9 +53,9 @@ function Edit({ opener, searchDB, value }) {
       return data.docs.length + 1;
     });
     targetDB
-      .add({
+      .doc(`article-${articleLength}`)
+      .set({
         content: text,
-        order: articleLength,
       })
       .then(() => {
         dispatch(RemoveAction({ target, typeName }));

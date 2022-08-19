@@ -12,9 +12,9 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
   const LoadToggle = useSelector((state) => state);
   const typeIndex = {
     deleteIndex: LoadToggle.deleteIndex.includes(value.id),
-    conIndex: LoadToggle.conIndex.includes(value.id),
     addIndex: LoadToggle.addIndex.includes(value.id),
   };
+
   function totalToggle(e, type) {
     let target = value.id;
     const current = e.currentTarget;
@@ -23,8 +23,8 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
 
     if (typeName === "deleteIndex") {
       dispatcher(examination, type, typeName, target);
-    } else if (typeName === "conIndex") {
-      dispatcher(examination, type, typeName, target);
+      //
+    } else if (typeName === "cardNum") {
       let num = current.closest(".card").getAttribute("data-index");
       target = value.pages[num];
       //
@@ -48,7 +48,7 @@ function Card({ FontAwesomeIcon, iconObject, value, dispatch, searchDB }) {
   }
 
   return (
-    <article className="list" style={{ order: `${value.order}` }}>
+    <article className="list">
       <CardTitleArea
         value={value}
         searchDB={searchDB}
