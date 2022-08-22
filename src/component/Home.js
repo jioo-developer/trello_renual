@@ -66,7 +66,6 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
                 dispatch={dispatch}
                 searchDB={searchDB}
                 key={`key-${index}`}
-                index={index}
               />
             );
           })

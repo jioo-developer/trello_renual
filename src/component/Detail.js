@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../reset.css";
 import "../asset/Detail.scss";
 import TextArea from "react-textarea-autosize";
-import { DetailAction, LabelAction } from "../module/reducer";
+import { DetailAction } from "../module/reducer";
 import { useSelector } from "react-redux";
 function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   const data = useSelector((state) => state.DetailData);
@@ -11,6 +11,7 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   const [text, setText] = useState("");
   const [descState, setDesc] = useState(false);
   const [labelState, setLabelState] = useState(false);
+  const [labels, setLabel] = useState([]);
   const TextRef = useRef();
 
   let labelColor = [
@@ -61,12 +62,30 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
     e.target.style.boxShadow = "";
   }
 
+  function LabelFunc(color) {
+    const copyState = [...labels];
+    copyState.push(color);
+    setLabel(copyState);
+  }
+
   useEffect(() => {
     if (descState) {
       TextRef.current.focus();
       TextRef.current.select();
     }
   }, [descState]);
+
+  useEffect(() => {
+    setLabel(data[2].label);
+  }, []);
+
+  useEffect(() => {
+    if (labels !== data[2].label && labels.length !== 0) {
+      searchDB.doc(data[0].id).collection("article").doc(data[1]).update({
+        label: labels,
+      });
+    }
+  }, [labels]);
 
   return (
     <section className="Detail-page">
@@ -107,7 +126,24 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
             in list <span>{data[0].header}</span>
           </p>
         </div>
-
+        <ul className="label-area">
+          <div
+            className="label-add"
+            onClick={() => {
+              setLabelState(!labelState);
+            }}
+          >
+            +
+          </div>
+          {labels.map((item, indexs) => {
+            return (
+              <li
+                style={{ backgroundColor: item, marginLeft: 7 }}
+                key={indexs}
+              ></li>
+            );
+          })}
+        </ul>
         <div className="left_con">
           <article className="des_area">
             <div className="area-header">
@@ -156,7 +192,6 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
               Label
             </li>
             <li onClick={deleteFunc}>Delete</li>
-            <li>CheckList</li>
           </ul>
           {labelState ? (
             <div className="label-detail">
@@ -184,7 +219,7 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
                         removeHover(e);
                       }}
                       onClick={() => {
-                        dispatch(LabelAction(color));
+                        LabelFunc(color);
                       }}
                     ></li>
                   );

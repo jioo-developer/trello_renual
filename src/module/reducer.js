@@ -5,14 +5,12 @@ const initialState = {
   addIndex: [],
   DetailToggle: false,
   DetailData: [],
-  label: [],
 };
 
 const EditToggle = "EditToggle";
 const ToggleIndex = "toggleIndex";
 const RemoveIndex = "removeIndex";
 const Detail = "Detail";
-const Label = "Label";
 
 export const EditAction = () => ({
   type: EditToggle,
@@ -30,11 +28,6 @@ export const RemoveAction = (data) => ({
 
 export const DetailAction = (data) => ({
   type: Detail,
-  data,
-});
-
-export const LabelAction = (data) => ({
-  type: Label,
   data,
 });
 
@@ -77,12 +70,6 @@ export default function reducer(state = initialState, action) {
           DetailData: [],
         };
       }
-
-    case Label:
-      return {
-        ...state,
-        label: [action.data],
-      };
 
     default:
       return state;

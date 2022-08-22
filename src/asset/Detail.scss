@@ -11,7 +11,7 @@
 
   .in-page {
     display: flex;
-    padding: 30px 20px;
+    padding: 20px;
     box-sizing: border-box;
     width: 730px;
     height: 930px;
@@ -50,7 +50,7 @@
           color: #172b4d;
           font-weight: 700;
           font-size: 20px;
-          width: 97% !important;
+          width: 90% !important;
           border: 0;
           resize: none;
         }
@@ -94,7 +94,7 @@
     }
 
     .label-area li {
-      width: 40px;
+      width: 66px;
       height: 32px;
       border-radius: 5px;
       margin-right: 5px;
@@ -179,7 +179,7 @@
       padding-left: 50px;
       flex-direction: column;
       position: relative;
-      bottom: 30px;
+      bottom: 65px;
 
       .gears {
         margin-right: 10px;
@@ -222,7 +222,7 @@
     .label-detail {
       width: 305px;
       position: absolute;
-      top: 200px;
+      top: 110px;
       right: 0;
       border: 1px solid #ddd;
       padding: 15px 10px 10px 10px;
