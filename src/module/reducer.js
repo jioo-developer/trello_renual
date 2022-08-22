@@ -67,7 +67,6 @@ export default function reducer(state = initialState, action) {
         return {
           ...state,
           DetailToggle: !state.DetailToggle,
-          DetailData: [],
         };
       }
 

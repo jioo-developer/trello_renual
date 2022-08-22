@@ -63,8 +63,14 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   }
 
   function LabelFunc(color) {
-    const copyState = [...labels];
+    let copyState = [...labels];
     if (copyState.includes(color)) {
+      copyState = copyState.filter((target) => {
+        if (target != color) {
+          return target;
+        }
+      });
+      setLabel(copyState);
     } else {
       copyState.push(color);
       setLabel(copyState);
@@ -94,7 +100,6 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
         label: labels,
       });
     }
-    console.log(labels);
   }, [labels]);
 
   return (
