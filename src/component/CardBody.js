@@ -3,6 +3,7 @@ import TextArea from "react-textarea-autosize";
 import Edit from "./Edit";
 import UseInput from "../hook/UseInput";
 import { useSelector } from "react-redux";
+import { DetailAction } from "../module/reducer";
 function CardBody({
   value,
   typeIndex,
@@ -10,6 +11,7 @@ function CardBody({
   searchDB,
   FontAwesomeIcon,
   iconObject,
+  dispatch,
 }) {
   const [content, setContent] = UseInput("");
   const cardIndex = useSelector((state) => state.cardNum);
@@ -73,9 +75,11 @@ function CardBody({
                     : {
                         outline: "none",
                         background: "transparent",
-                        cursor: "default",
                       }
                 }
+                onClick={() => {
+                  dispatch(DetailAction());
+                }}
               />
               {cardIndex.includes(value.pages[index2]) === false ? (
                 <button
@@ -91,7 +95,12 @@ function CardBody({
               ) : null}
             </div>
 
-            <div className="icon_wrap">
+            <div
+              className="icon_wrap"
+              onClick={() => {
+                dispatch(DetailAction());
+              }}
+            >
               <FontAwesomeIcon icon={iconObject.faList} size="1x" />
             </div>
             {cardIndex.includes(value.pages[index2]) ? (

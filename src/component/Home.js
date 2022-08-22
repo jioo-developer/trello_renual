@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Creator from "./Creator";
 import Card from "./Card";
+import Page from "./Detail";
 function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   const dispatch = useDispatch();
   const [connectArray, setConnet] = useState([]);
   const [list, setList] = useState([]);
+  const pageState = useSelector((state) => state.DetailToggle);
   const searchDB = db.collection(DBNAME);
 
   useEffect(() => {
@@ -85,6 +87,14 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
       >
         로그아웃
       </button>
+      {pageState ? (
+        <Page
+          FontAwesomeIcon={FontAwesomeIcon}
+          iconObject={iconObject}
+          dispatch={dispatch}
+          searchDB={searchDB}
+        />
+      ) : null}
     </section>
   );
 }
