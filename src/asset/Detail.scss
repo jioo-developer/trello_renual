@@ -52,7 +52,6 @@
           font-size: 20px;
           width: 97% !important;
           border: 0;
-          background: transparent;
           resize: none;
         }
 
@@ -63,7 +62,7 @@
         }
       }
       .inst {
-        padding: 10px 0 20px 37px;
+        padding: 10px 0 20px 21px;
         font-size: 14px;
 
         span {
@@ -265,4 +264,17 @@
       }
     }
   }
+}
+
+.savePost {
+  width: 100%;
+  background: #091e420a;
+  padding: 7px 0;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.savePost:hover {
+  background: #333;
+  color: #fff;
 }

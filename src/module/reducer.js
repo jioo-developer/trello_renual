@@ -4,6 +4,7 @@ const initialState = {
   cardNum: [],
   addIndex: [],
   DetailToggle: false,
+  DetailData: [],
 };
 
 const EditToggle = "EditToggle";
@@ -25,8 +26,9 @@ export const RemoveAction = (data) => ({
   data,
 });
 
-export const DetailAction = () => ({
+export const DetailAction = (data) => ({
   type: Detail,
+  data,
 });
 
 export default function reducer(state = initialState, action) {
@@ -55,10 +57,19 @@ export default function reducer(state = initialState, action) {
       };
 
     case Detail:
-      return {
-        ...state,
-        DetailToggle: !state.DetailToggle,
-      };
+      if (!state.DetailToggle) {
+        return {
+          ...state,
+          DetailToggle: !state.DetailToggle,
+          DetailData: [...action.data],
+        };
+      } else {
+        return {
+          ...state,
+          DetailToggle: !state.DetailToggle,
+          DetailData: [],
+        };
+      }
 
     default:
       return state;

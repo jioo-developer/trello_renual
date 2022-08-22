@@ -31,10 +31,15 @@ function CardBody({
   function contentUpdate(e, idx) {
     const target = value.pages[idx];
     searchDB.doc(value.id).collection("article").doc(target).update({
-      content: content,
+      conHeader: content,
     });
     totalToggle(e);
   }
+
+  const toData = {
+    header: value.header,
+    id: value.id,
+  };
 
   return (
     <div className="list-body">
@@ -57,7 +62,7 @@ function CardBody({
             >
               <TextArea
                 className="card-text"
-                defaultValue={item.content}
+                defaultValue={item.conHeader}
                 name="cardNum"
                 onChange={(e) => {
                   if (cardIndex.includes(value.pages[index2])) {
@@ -78,7 +83,7 @@ function CardBody({
                       }
                 }
                 onClick={() => {
-                  dispatch(DetailAction());
+                  dispatch(DetailAction([toData, value.pages[index2], item]));
                 }}
               />
               {cardIndex.includes(value.pages[index2]) === false ? (
@@ -98,7 +103,7 @@ function CardBody({
             <div
               className="icon_wrap"
               onClick={() => {
-                dispatch(DetailAction());
+                dispatch(DetailAction([toData, value.pages[index2], item]));
               }}
             >
               <FontAwesomeIcon icon={iconObject.faList} size="1x" />
