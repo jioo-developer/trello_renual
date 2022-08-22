@@ -64,8 +64,11 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
 
   function LabelFunc(color) {
     const copyState = [...labels];
-    copyState.push(color);
-    setLabel(copyState);
+    if (copyState.includes(color)) {
+    } else {
+      copyState.push(color);
+      setLabel(copyState);
+    }
   }
 
   useEffect(() => {
@@ -76,7 +79,13 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   }, [descState]);
 
   useEffect(() => {
-    setLabel(data[2].label);
+    if (data[2].label !== undefined) {
+      setLabel(data[2].label);
+    } else {
+      setLabel(labels);
+    }
+    setTitle(data[2].header);
+    setText(data[2].conText);
   }, []);
 
   useEffect(() => {
@@ -85,6 +94,7 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
         label: labels,
       });
     }
+    console.log(labels);
   }, [labels]);
 
   return (
@@ -135,14 +145,16 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
           >
             +
           </div>
-          {labels.map((item, indexs) => {
-            return (
-              <li
-                style={{ backgroundColor: item, marginLeft: 7 }}
-                key={indexs}
-              ></li>
-            );
-          })}
+          {labels.length !== 0
+            ? labels.map((item, indexs) => {
+                return (
+                  <li
+                    style={{ backgroundColor: item, marginLeft: 7 }}
+                    key={indexs}
+                  ></li>
+                );
+              })
+            : null}
         </ul>
         <div className="left_con">
           <article className="des_area">

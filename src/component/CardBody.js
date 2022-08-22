@@ -88,7 +88,9 @@ function CardBody({
                       }
                 }
                 onClick={() => {
-                  dispatch(DetailAction([toData, value.pages[index2], item]));
+                  if (!cardIndex.includes(value.pages[index2])) {
+                    dispatch(DetailAction([toData, value.pages[index2], item]));
+                  }
                 }}
               />
               {cardIndex.includes(value.pages[index2]) === false ? (
@@ -108,7 +110,9 @@ function CardBody({
             <div
               className="icon_wrap"
               onClick={() => {
-                dispatch(DetailAction([toData, value.pages[index2], item]));
+                if (!cardIndex.includes(value.pages[index2])) {
+                  dispatch(DetailAction([toData, value.pages[index2], item]));
+                }
               }}
             >
               <FontAwesomeIcon icon={iconObject.faList} size="1x" />
