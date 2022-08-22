@@ -9,6 +9,8 @@ import {
   faPlus,
   faXmark,
   faTrashRestore,
+  faCreditCard,
+  faGear,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./asset/App.scss";
@@ -26,6 +28,8 @@ function App() {
     faPlus,
     faXmark,
     faTrashRestore,
+    faCreditCard,
+    faGear,
   };
 
   const storageName = "dbName";

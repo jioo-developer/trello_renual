@@ -62,8 +62,9 @@
         }
       }
       .inst {
-        padding: 10px 0 20px 21px;
+        padding: 10px 0 20px 45px;
         font-size: 14px;
+        align-self: flex-start;
 
         span {
           text-decoration: underline;
@@ -177,6 +178,8 @@
       width: 180px;
       padding-left: 50px;
       flex-direction: column;
+      position: relative;
+      bottom: 30px;
 
       .gears {
         margin-right: 10px;
@@ -219,8 +222,8 @@
     .label-detail {
       width: 305px;
       position: absolute;
-      top: 45px;
-      left: 0;
+      top: 200px;
+      right: 0;
       border: 1px solid #ddd;
       padding: 15px 10px 10px 10px;
       box-sizing: border-box;

@@ -15,6 +15,7 @@ function CardBody({
 }) {
   const [content, setContent] = UseInput("");
   const cardIndex = useSelector((state) => state.cardNum);
+  const label = useSelector((state) => state.label);
   const onchangeContent = useCallback(
     (e) => {
       setContent(e);
@@ -47,7 +48,11 @@ function CardBody({
         return (
           <article className="card" data-index={index2} key={`card-${index2}`}>
             <ul className="label-wrap">
-              <li className="show-label"></li>
+              {label.length !== 0
+                ? label.map((color, item) => {
+                    return <li style={{ backgroundColor: color }}></li>;
+                  })
+                : null}
             </ul>
             <div
               className="text_wrap"

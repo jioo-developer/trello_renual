@@ -54,7 +54,7 @@ function Edit({ opener, searchDB, value }) {
     targetDB
       .doc(`article-${articleLength}`)
       .set({
-        content: text,
+        conHeader: text,
       })
       .then(() => {
         dispatch(RemoveAction({ target, typeName }));

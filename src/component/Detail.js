@@ -1,8 +1,8 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../reset.css";
 import "../asset/Detail.scss";
 import TextArea from "react-textarea-autosize";
-import { DetailAction } from "../module/reducer";
+import { DetailAction, LabelAction } from "../module/reducer";
 import { useSelector } from "react-redux";
 function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   const data = useSelector((state) => state.DetailData);
@@ -10,7 +10,19 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [descState, setDesc] = useState(false);
+  const [labelState, setLabelState] = useState(false);
   const TextRef = useRef();
+
+  let labelColor = [
+    "#618d4f",
+    "#f2d600",
+    "#ff9f1a",
+    "#eb5a46",
+    "#c377e0",
+    "#0079bf",
+    "#ff78cb",
+    "#344563",
+  ];
 
   const onChangeTitle = useCallback(
     (e) => {
@@ -33,13 +45,28 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
     });
   }
 
-  function focusState() {
-    setDesc(!descState);
+  function deleteFunc() {
+    const delCheck = window.confirm("삭제하시겠습니까?");
+    if (delCheck) {
+      dispatch(DetailAction());
+      searchDB.doc(data[0].id).collection("article").doc(data[1]).delete();
+    }
+  }
+
+  function hoverEvent(e, argument) {
+    e.target.style.boxShadow = `-8px 0 ${argument}`;
+  }
+
+  function removeHover(e) {
+    e.target.style.boxShadow = "";
+  }
+
+  useEffect(() => {
     if (descState) {
       TextRef.current.focus();
       TextRef.current.select();
     }
-  }
+  }, [descState]);
 
   return (
     <section className="Detail-page">
@@ -50,10 +77,12 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
           className="page-close"
           onClick={() => {
             dispatch(DetailAction());
+            setLabelState(false);
           }}
         />
         <div className="page-header">
           <div className="in-wrap">
+            <FontAwesomeIcon icon={iconObject.faCreditCard} size="1x" />
             <TextArea
               minRows={1}
               className="page-title"
@@ -78,12 +107,18 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
             in list <span>{data[0].header}</span>
           </p>
         </div>
+
         <div className="left_con">
           <article className="des_area">
             <div className="area-header">
               <FontAwesomeIcon icon={iconObject.faList} size="1x" />
               <p>Description</p>
-              <button type="button" onClick={focusState}>
+              <button
+                type="button"
+                onClick={() => {
+                  setDesc(!descState);
+                }}
+              >
                 Edit
               </button>
             </div>
@@ -105,12 +140,58 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
           </article>
         </div>
         <article className="btn-area">
+          <FontAwesomeIcon
+            icon={iconObject.faGear}
+            size="1x"
+            className="gears"
+            style={{ marginBottom: 10 }}
+          />
           <p>utility</p>
           <ul className="btns">
-            <li>Label</li>
-            <li>Delete</li>
+            <li
+              onClick={() => {
+                setLabelState(!labelState);
+              }}
+            >
+              Label
+            </li>
+            <li onClick={deleteFunc}>Delete</li>
             <li>CheckList</li>
           </ul>
+          {labelState ? (
+            <div className="label-detail">
+              <div className="label-header">
+                <p>Labels</p>
+                <FontAwesomeIcon
+                  icon={iconObject.faXmark}
+                  size="1x"
+                  className="label-close"
+                  onClick={() => {
+                    setLabelState(!labelState);
+                  }}
+                />
+              </div>
+              <ul>
+                {labelColor.map((color, item) => {
+                  return (
+                    <li
+                      key={item}
+                      style={{ backgroundColor: color }}
+                      onMouseEnter={(e) => {
+                        hoverEvent(e, color);
+                      }}
+                      onMouseLeave={(e) => {
+                        removeHover(e);
+                      }}
+                      onClick={() => {
+                        dispatch(LabelAction(color));
+                      }}
+                    ></li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
         </article>
       </article>
     </section>
