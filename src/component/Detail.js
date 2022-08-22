@@ -12,6 +12,7 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   const [descState, setDesc] = useState(false);
   const [labelState, setLabelState] = useState(false);
   const [labels, setLabel] = useState([]);
+  const [check, setCheck] = useState(false);
   const TextRef = useRef();
 
   let labelColor = [
@@ -75,6 +76,7 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
       copyState.push(color);
       setLabel(copyState);
     }
+    setCheck(true);
   }
 
   useEffect(() => {
@@ -95,7 +97,7 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   }, []);
 
   useEffect(() => {
-    if (labels !== data[2].label && labels.length !== 0) {
+    if (labels !== data[2].label && check) {
       searchDB.doc(data[0].id).collection("article").doc(data[1]).update({
         label: labels,
       });
@@ -112,6 +114,7 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
           onClick={() => {
             dispatch(DetailAction());
             setLabelState(false);
+            setCheck(false);
           }}
         />
         <div className="page-header">
