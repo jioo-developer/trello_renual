@@ -3,15 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import Creator from "./Creator";
 import Card from "./Card";
 import Page from "./Detail";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   const dispatch = useDispatch();
   const [connectArray, setConnet] = useState([]);
   const [list, setList] = useState([]);
   const pageState = useSelector((state) => state.DetailToggle);
   const searchDB = db.collection(DBNAME);
+  const timeDB = collection(db, DBNAME);
 
   useEffect(() => {
-    searchDB.onSnapshot((snapshot) => {
+    const dataQuery = query(timeDB, orderBy("timeStamp", "asc"));
+
+    const data = onSnapshot(dataQuery, (snapshot) => {
       const header = snapshot.docs.map((data) => {
         return {
           ...data.data(),
@@ -22,6 +26,8 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
       });
       setConnet(header);
     });
+
+    return data;
   }, []);
 
   useEffect(() => {
@@ -39,18 +45,20 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   }
 
   function connecting(item) {
+    const collectionRef = searchDB.doc(item.id).collection(db, "article");
+    const dataQuery = query(collectionRef, orderBy("timeStamp", "asc"));
+
     return new Promise(function (resolve) {
-      searchDB
-        .doc(item.id)
-        .collection("article")
-        .onSnapshot((snapshot) => {
-          item.contents = [];
-          snapshot.docs.forEach((value) => {
-            item.contents.push(value.data());
-            item.pages.push(value.id);
-          });
-          resolve(item);
+      let result = onSnapshot(dataQuery, (snapshot) => {
+        console.log(snapshot);
+        item.contents = [];
+        snapshot.docs.forEach((value) => {
+          item.contents.push(value.data());
+          item.pages.push(value.id);
         });
+        resolve(item);
+      });
+      return result;
     });
   }
 

@@ -37,18 +37,23 @@ function CardTitleArea({
 
   function deleteHandler(e) {
     const delCheck = window.confirm("정말 삭제하시겠습니까?");
-    if(delCheck){
-      searchDB.doc(value.id).collection("article").get().then((result)=>{
-        if(result.docs.length !== 0){
-        result.docs.map((values,indexs)=>{
-          searchDB.doc(value.id).collection("article").doc(`article-${indexs+1}`).delete();
+    if (delCheck) {
+      searchDB
+        .doc(value.id)
+        .collection("article")
+        .get()
+        .then((result) => {
+          if (result.docs.length !== 0) {
+            result.docs.map((values, indexs) => {
+              searchDB.doc(value.id).collection("article").doc(values).delete();
+            });
+          }
         })
-        }
-      }).then(()=>{
-        searchDB.doc(value.id).delete();
-      })
+        .then(() => {
+          searchDB.doc(value.id).delete();
+        });
     }
-        totalToggle(e);
+    totalToggle(e);
   }
 
   return (

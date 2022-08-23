@@ -5,6 +5,7 @@ import TextArea from "react-textarea-autosize";
 import { useDispatch } from "react-redux";
 import { EditAction, RemoveAction } from "../module/reducer";
 import useInput from "../hook/UseInput";
+import { serverTimestamp } from "firebase/firestore";
 import "../asset/Edit.scss";
 function Edit({ opener, searchDB, value }) {
   const dispatch = useDispatch();
@@ -19,13 +20,10 @@ function Edit({ opener, searchDB, value }) {
 
   async function createCard(e) {
     e.preventDefault();
-    const length = await searchDB.get().then((data) => {
-      return data.docs.length + 1;
-    });
     await searchDB
-      .doc(`0${length}`)
-      .set({
+      .add({
         header: text,
+        timeStamp: serverTimestamp(),
       })
       .then(() => {
         dispatch(EditAction());
@@ -48,13 +46,10 @@ function Edit({ opener, searchDB, value }) {
     const target = value.id;
     const typeName = e.target.name;
     const targetDB = searchDB.doc(target).collection("article");
-    const articleLength = await targetDB.get().then((data) => {
-      return data.docs.length + 1;
-    });
     targetDB
-      .doc(`article-${articleLength}`)
-      .set({
+      .add({
         conHeader: text,
+        timeStamp: serverTimestamp(),
       })
       .then(() => {
         dispatch(RemoveAction({ target, typeName }));
