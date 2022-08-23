@@ -10,12 +10,10 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   const [list, setList] = useState([]);
   const pageState = useSelector((state) => state.DetailToggle);
   const searchDB = db.collection(DBNAME);
-  const timeDB = collection(db, DBNAME);
 
   useEffect(() => {
-    const dataQuery = query(timeDB, orderBy("timeStamp", "asc"));
-
-    const data = onSnapshot(dataQuery, (snapshot) => {
+    const collectionRef = searchDB.orderBy("timeStamp", "asc");
+    collectionRef.onSnapshot((snapshot) => {
       const header = snapshot.docs.map((data) => {
         return {
           ...data.data(),
@@ -26,8 +24,6 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
       });
       setConnet(header);
     });
-
-    return data;
   }, []);
 
   useEffect(() => {
@@ -45,12 +41,13 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   }
 
   function connecting(item) {
-    const collectionRef = searchDB.doc(item.id).collection(db, "article");
-    const dataQuery = query(collectionRef, orderBy("timeStamp", "asc"));
+    const collectionRef = searchDB
+      .doc(item.id)
+      .collection("article")
+      .orderBy("timeStamp", "asc");
 
     return new Promise(function (resolve) {
-      let result = onSnapshot(dataQuery, (snapshot) => {
-        console.log(snapshot);
+      collectionRef.onSnapshot((snapshot) => {
         item.contents = [];
         snapshot.docs.forEach((value) => {
           item.contents.push(value.data());
@@ -58,7 +55,6 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
         });
         resolve(item);
       });
-      return result;
     });
   }
 
