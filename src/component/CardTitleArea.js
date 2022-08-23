@@ -44,7 +44,7 @@ function CardTitleArea({
         .get()
         .then((result) => {
           if (result.docs.length !== 0) {
-            result.docs.map((values, indexs) => {
+            result.docs.map((values) => {
               searchDB.doc(value.id).collection("article").doc(values).delete();
             });
           }
