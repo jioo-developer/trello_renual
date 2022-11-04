@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Creator from "./Creator";
 import Card from "./Card";
 import Page from "./Detail";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   const dispatch = useDispatch();
   const [connectArray, setConnet] = useState([]);
@@ -49,7 +48,7 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
     return new Promise(function (resolve) {
       collectionRef.onSnapshot((snapshot) => {
         item.contents = [];
-        snapshot.docs.forEach((value) => {
+        snapshot.docs.map((value) => {
           item.contents.push(value.data());
           item.pages.push(value.id);
         });
@@ -61,7 +60,7 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   return (
     <section className="board_wrap">
       {list.length !== 0
-        ? list.map(function (value, index) {
+        ? list.map(function (value) {
             return (
               <Card
                 value={value}
@@ -69,7 +68,7 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
                 iconObject={iconObject}
                 dispatch={dispatch}
                 searchDB={searchDB}
-                key={`key-${index}`}
+                key={`key-${value.id}`}
               />
             );
           })
