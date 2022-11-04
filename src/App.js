@@ -66,7 +66,8 @@ function App() {
             window.location.reload();
           });
         } else {
-         setInit(false)
+         setInit(false);
+         loadCookie();
         }
       } else {
         setInit(true);
