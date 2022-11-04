@@ -64,9 +64,6 @@ function App() {
           .then(() => {
             window.location.reload();
           });
-      } else {
-        setInit(true);
-        localStorage.setItem(storageName, JSON.stringify(DBNAME));
       }
     });
   }
