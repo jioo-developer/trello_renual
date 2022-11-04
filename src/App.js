@@ -51,8 +51,7 @@ function App() {
     const dbValue = await db.collection(DBNAME);
     dbValue.get().then((data) => {
       if (data.docs.length === 0) {
-        let sure = window.confirm("검색되는 DB가 없습니다. 새로 만드시겠습니까?");
-        if(sure) {
+        window.alert("검색되는 DB가 없습니다. 새로 만드는 중입니다");
         localStorage.setItem(storageName, JSON.stringify(DBNAME));
         dbValue
           .doc("todo")
@@ -65,10 +64,6 @@ function App() {
           .then(() => {
             window.location.reload();
           });
-        } else {
-         setInit(false);
-         loadCookie();
-        }
       } else {
         setInit(true);
         localStorage.setItem(storageName, JSON.stringify(DBNAME));
