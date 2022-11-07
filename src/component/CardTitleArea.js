@@ -20,11 +20,10 @@ function CardTitleArea({
     [header]
   );
 
-  async function titleEnter(e) {
-    console.log(e.target);
+  function titleEnter(e) {
     if (e.keyCode === 13) {
       e.preventDefault();
-      await searchDB
+      searchDB
         .doc(value.id)
         .update({
           header: header,

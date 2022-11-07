@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import TextArea from "react-textarea-autosize";
 import Edit from "./Edit";
 import UseInput from "../hook/UseInput";
@@ -49,7 +49,7 @@ function CardBody({
           <article className="card" data-index={index2} key={`card-${index2}`}>
             <ul className="label-wrap">
               {item.label !== undefined
-                ? item.label.map((color, item) => {
+                ? item.label.map((color) => {
                     return <li style={{ backgroundColor: color }}></li>;
                   })
                 : null}
