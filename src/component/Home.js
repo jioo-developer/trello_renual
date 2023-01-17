@@ -10,6 +10,7 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
   const pageState = useSelector((state) => state.DetailToggle);
   const searchDB = db.collection(DBNAME);
 
+  // firebase의 1차 문서의 데이터를 불러와서 connectArray에 넣어줌
   useEffect(() => {
     const collectionRef = searchDB.orderBy("timeStamp", "asc");
     collectionRef.onSnapshot((snapshot) => {
@@ -25,6 +26,8 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
     });
   }, []);
 
+  // firebase의 1차 문서의 데이터를 불러와서 connectArray에 넣어줌
+
   useEffect(() => {
     if (connectArray !== 0) {
       request();
@@ -39,6 +42,7 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
     );
   }
 
+  // firebase데이터의 문서 안 문서들의 데이터를 가져오는 함수
   function connecting(item) {
     const collectionRef = searchDB
       .doc(item.id)
@@ -56,6 +60,8 @@ function Home({ FontAwesomeIcon, iconObject, db, DBNAME }) {
       });
     });
   }
+
+  // firebase데이터의 문서 안 문서들의 데이터를 가져오는 함수
 
   return (
     <section className="board_wrap">

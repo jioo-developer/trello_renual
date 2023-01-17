@@ -19,7 +19,9 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./component/Home";
 function App() {
   const [init, setInit] = useState(false);
+  // init 상태
   const [DBNAME, setDBNAME] = useState("");
+  // DB저장STATE
   const iconObject = {
     faCheck,
     faEllipsis,
@@ -38,6 +40,7 @@ function App() {
     loadCookie();
   }, []);
 
+  // 이미 사용중인 DB가 있다면 localStorage에서 가져오는 함수
   function loadCookie() {
     const load = JSON.parse(localStorage.getItem(storageName));
     if (load !== null) {
@@ -45,7 +48,9 @@ function App() {
       setInit(true);
     }
   }
+  // 이미 사용중인 DB가 있다면 localStorage에서 가져오는 함수
 
+  // DB 접근하거나 없다면 생성하는 함수
   async function LoginDB(e) {
     e.preventDefault();
     const dbValue = await db.collection(DBNAME);
@@ -67,6 +72,7 @@ function App() {
       }
     });
   }
+  // DB 접근하거나 없다면 생성하는 함수
 
   return (
     <div className="App">

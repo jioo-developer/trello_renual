@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
   const data = useSelector((state) => state.DetailData);
   const [back, setBack] = useState(false);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(null);
   const [text, setText] = useState("");
   const [descState, setDesc] = useState(false);
   const [labelState, setLabelState] = useState(false);
@@ -45,6 +45,9 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
       conHeader: title,
       conText: text,
     });
+    setDesc(false);
+    window.alert("변경되었습니다.");
+    window.location.reload();
   }
 
   function deleteFunc() {
@@ -92,7 +95,7 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
     } else {
       setLabel(labels);
     }
-    setTitle(data[2].header);
+    setTitle(data[2].conHeader);
     setText(data[2].conText);
   }, []);
 
@@ -211,6 +214,7 @@ function Detail({ FontAwesomeIcon, iconObject, dispatch, searchDB }) {
             >
               Label
             </li>
+            <li onClick={Save}>Save</li>
             <li onClick={deleteFunc}>Delete</li>
           </ul>
           {labelState ? (

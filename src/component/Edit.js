@@ -18,6 +18,8 @@ function Edit({ opener, searchDB, value }) {
     [text]
   );
 
+  // 새로운 카드 영역을 만드는 함수
+
   async function createCard(e) {
     e.preventDefault();
     await searchDB
@@ -30,6 +32,10 @@ function Edit({ opener, searchDB, value }) {
       });
   }
 
+  // 새로운 카드 영역을 만드는 함수
+
+  // 일정 만드는 폼의 close 함수
+
   function closeAction(e) {
     const current = e.currentTarget.id;
     if (current === "creator") {
@@ -41,6 +47,9 @@ function Edit({ opener, searchDB, value }) {
     }
   }
 
+  // 일정 만드는 폼의 close 함수
+
+  // 선택된 카드영역 안에 새로운 일정을 만드는 함수
   async function newCard(e) {
     e.preventDefault();
     const target = value.id;
@@ -55,7 +64,7 @@ function Edit({ opener, searchDB, value }) {
         dispatch(RemoveAction({ target, typeName }));
       });
   }
-
+  // 카드영역안에 새로운 일정을 만드는 함수
   return (
     <form
       name="addIndex"
